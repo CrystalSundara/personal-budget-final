@@ -1,6 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { Chart } from 'chart.js';
-import { DataService } from '../data.service';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'pb-homepage',

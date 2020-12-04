@@ -8,11 +8,20 @@ import { ContactComponent } from './contact/contact.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 
 const routes: Routes = [
+  // {
+  //   path: '',
+  //   component: HomepageComponent,
+  //   pathMatch: 'full'
+  // },
   {
     path: '',
-    component: HomepageComponent,
+    redirectTo: '/home',
     pathMatch: 'full'
-  },
+},
+{
+    path: 'home',
+    component: HomepageComponent
+},
   {
     path: 'about',
     component: AboutComponent,

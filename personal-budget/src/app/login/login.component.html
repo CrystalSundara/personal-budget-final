@@ -1,4 +1,4 @@
-<main role="main" class="container center">
+<!-- <main role="main" class="container center">
 
   <pb-breadcrumbs>
     <a [routerLink]="['/']">Home</a>
@@ -8,4 +8,32 @@
 
   <h2>login works!</h2>
 
-</main>
+</main> -->
+
+<div *ngIf="isLoggedIn; else loggedOut">
+  Logged in as {{role}}.
+</div>
+
+<ng-template #loggedOut>
+
+    <h1 class="row">Login</h1>
+
+        <div class="row">
+          <label for="username">User name</label>
+          <input type="text" name="username" id="username">
+        </div>
+
+        <div class="row">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password">
+        </div>
+
+        <div>
+            <button (click)="login()">Login</button>
+        </div>
+  <!-- <button class="btn btn-secondary" (click)="login()">Login to dashboard</button>
+  <button class="btn btn-primary" (click)="loginAdmin()">Login as Admin</button> -->
+  <hr />
+  <p>Don't have an account?</p>
+  <a href="signup" class="btn btn-success">Sign Up</a>
+</ng-template>

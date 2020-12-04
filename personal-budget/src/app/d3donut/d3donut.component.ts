@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../data.service';
+import { DataService } from '../services/data.service';
 import * as d3 from 'd3';
 
 @Component({
@@ -9,7 +9,7 @@ import * as d3 from 'd3';
 })
 export class D3donutComponent implements OnInit {
 
-  // private data = [
+  // private data = [s
   //   {title: 'Eat out', budget: '30'},
   //   {title: 'Rent', budget: '350'},
   //   {title: 'Grocery', budget: '90'},
