@@ -45,6 +45,7 @@ export class MenuComponent implements OnInit {
 
   logout() {
     this.navbarService.updateLoginStatus(false);
+    localStorage.removeItem('jwt');
     this.router.navigate(['home']);
   }
 

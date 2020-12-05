@@ -18,19 +18,32 @@
 
     <h1 class="row">Login</h1>
 
-        <div class="row">
+        <!-- <div class="row">
           <label for="username">User name</label>
-          <input type="text" name="username" id="username">
+          <input type="text" name="username" [(ngModel)]="username">
         </div>
 
         <div class="row">
             <label for="password">Password</label>
-            <input type="password" name="password" id="password">
+            <input type="password" name="password" [(ngModel)]="password">
         </div>
 
         <div>
             <button (click)="login()">Login</button>
-        </div>
+        </div> -->
+        <div>
+          <form [formGroup]="formdata" (ngSubmit) = "onClickSubmit(formdata.value)" >
+             <input type="text" class="fortextbox" name="user" formControlName="user">
+             <br/>
+
+             <input type="password" class="fortextbox" name="passwd" formControlName="passwd">
+             <br/>
+
+             <input type="submit" class="forsubmit" value="Log In">
+          </form>
+       </div>
+
+
   <!-- <button class="btn btn-secondary" (click)="login()">Login to dashboard</button>
   <button class="btn btn-primary" (click)="loginAdmin()">Login as Admin</button> -->
   <hr />

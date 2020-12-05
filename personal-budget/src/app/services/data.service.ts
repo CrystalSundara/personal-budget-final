@@ -28,6 +28,9 @@ export class DataService {
     labels: []
     };
 
+    public username;
+    public token;
+
     // public d3DataSource = {
     //   labels: [],
     //   values: []
@@ -51,6 +54,23 @@ export class DataService {
 
   getChartData(): Observable<any> {
     return this.http.get('http://localhost:3000/budget');
+  }
+
+  // public getUserData(creds): <any> {
+  //   // return this.http.post('http://localhost:3000/api/login', creds);
+  //   this.http.post('http://localhost:3000/api/login', creds)
+  //   .subscribe((res: any) =>  {
+  //     // if(res.success === true) {
+  //       this.token = res.token;
+  //       return res;
+  //     // }
+  //   });
+  // }
+
+  public getUserData(creds): any {
+      const response = this.http.post('http://localhost:3000/api/login', creds);
+      this.token = response.token;
+      return response;
   }
 
 }
