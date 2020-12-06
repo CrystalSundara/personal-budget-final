@@ -21,6 +21,7 @@ import { D3donutComponent } from './d3donut/d3donut.component';
 
 import { DataService } from './services/data.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { SignupComponent } from './signup/signup.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     BreadcrumbsComponent,
     ContactComponent,
     D3donutComponent,
-    DashboardComponent
+    DashboardComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,

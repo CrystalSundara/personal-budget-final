@@ -17,6 +17,7 @@
 <ng-template #loggedOut>
 
     <h1 class="row">Login</h1>
+    <p class="error">{{error}}</p>
 
         <!-- <div class="row">
           <label for="username">User name</label>
@@ -39,7 +40,7 @@
              <input type="password" class="fortextbox" name="passwd" formControlName="passwd">
              <br/>
 
-             <input type="submit" class="forsubmit" value="Log In">
+             <input type="submit" class="forsubmit" value="Log in">
           </form>
        </div>
 
@@ -47,6 +48,7 @@
   <!-- <button class="btn btn-secondary" (click)="login()">Login to dashboard</button>
   <button class="btn btn-primary" (click)="loginAdmin()">Login as Admin</button> -->
   <hr />
-  <p>Don't have an account?</p>
+  <p>Don't have an account?
   <a href="signup" class="btn btn-success">Sign Up</a>
+  </p>
 </ng-template>

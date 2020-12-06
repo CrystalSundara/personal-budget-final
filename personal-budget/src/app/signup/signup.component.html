@@ -1,0 +1,30 @@
+<div *ngIf="isLoggedIn; else loggedOut">
+  Logged in as {{role}}.
+</div>
+
+
+<ng-template #loggedOut>
+
+    <h1 class="row">Sign up</h1>
+    <p class="error">{{ error }}</p>
+
+
+        <div>
+          <form [formGroup]="formdata" (ngSubmit) = "onClickSubmit(formdata.value)" >
+             <input type="text" class="fortextbox" name="user" formControlName="user">
+             <br/>
+
+             <input type="password" class="fortextbox" name="passwd" formControlName="passwd">
+             <br/>
+
+             <input type="submit" class="forsubmit" value="Sign up">
+          </form>
+       </div>
+
+       <hr />
+       <p>Go back to
+       <a href="login" class="btn btn-success">Log in</a>
+       </p>
+
+
+</ng-template>

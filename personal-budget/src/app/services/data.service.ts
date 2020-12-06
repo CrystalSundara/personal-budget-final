@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 
@@ -69,8 +69,21 @@ export class DataService {
 
   public getUserData(creds): any {
       const response = this.http.post('http://localhost:3000/api/login', creds);
-      this.token = response.token;
+      // this.token = response.token;
       return response;
   }
+
+  // public postLogin (creds): Observable<any> {
+  //   return this.http.post('http://localhost:3000/api/login', creds)
+  //     .pipe(
+  //       catchError(this.handleError(creds))
+  //     );
+  // }
+
+  public postUserData(creds): any {
+    const response = this.http.post('http://localhost:3000/api/signup', creds);
+    // this.token = response.token;
+    return response;
+}
 
 }
