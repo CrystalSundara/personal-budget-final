@@ -21,9 +21,9 @@ export class D3donutComponent implements OnInit {
   private data = [];
   private labels = [];
   private svg;
-  private margin = 50;
-  private width = 750;
-  private height = 600;
+  private margin = 10;
+  private width = 625;
+  private height = 500;
   // The radius of the pie chart is half the smallest side
   private radius = Math.min(this.width, this.height) / 2 - this.margin;
   private colors;

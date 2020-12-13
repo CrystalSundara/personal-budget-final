@@ -1,1 +1,37 @@
-<p>dashboard works!</p>
+<main role="main" class="container center">
+
+  <pb-breadcrumbs>
+    <a [routerLink]="['/']">Home</a>
+    <p>/</p>
+    <p>Dashboard</p>>
+  </pb-breadcrumbs>
+  <div class = "row">
+    <div class="col-6">
+      <h3>ChartJS Pie Chart</h3>
+      <p>
+          <canvas id="myChart" width="400px" height="400px"></canvas>
+      </p>
+    </div>
+    <div class="col-6">
+        <h3>D3JS Pie Chart</h3>
+        <pb-d3donut></pb-d3donut>
+    </div>
+    <div class="col-6">
+      <h3>ChartJS Radar Chart</h3>
+      <p>
+        <canvas id="radar" class="chart chart-radar"
+      chart-data="data" chart-options="options" chart-labels="labels" width="400px" height="400px">
+      </canvas>
+      </p>
+    </div>
+    <div class="col-6">
+
+      <h3>ChartJS Bar and Line Chart</h3>
+      <p>
+        <canvas id="mixed" class="chart chart-mixed"
+      chart-data="data" chart-options="options" chart-labels="labels" width="400px" height="400px">
+      </canvas>
+      </p>
+    </div>
+  </div>
+</main>
