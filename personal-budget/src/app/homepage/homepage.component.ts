@@ -1,6 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { DataService } from '../services/data.service';
+import { ErrorService } from '../services/error.service';
 
 @Component({
   selector: 'pb-homepage',
@@ -9,12 +10,14 @@ import { DataService } from '../services/data.service';
 })
 export class HomepageComponent implements AfterViewInit {
 
-  constructor(public dataService: DataService) { }
+  constructor(public dataService: DataService, public errorService: ErrorService) { }
 
   ngAfterViewInit(): void {
     this.dataService.getChartData().subscribe((data: any) => {
       this.createChart(data);
     });
+    // console.log('Home', this.errorService.errMsg);
+    // console.log('Home', this.dataService.errMsg);
   }
 
   createChart(data): void {

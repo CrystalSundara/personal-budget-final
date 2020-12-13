@@ -15,9 +15,9 @@
 </div>
 
 <ng-template #loggedOut>
-
-    <h1 class="row">Login</h1>
-    <p class="error">{{error}}</p>
+  <div class="container">
+    <h1>Login</h1>
+      <p class="error">{{ dataService.errMsg }}</p>
 
         <!-- <div class="row">
           <label for="username">User name</label>
@@ -32,15 +32,19 @@
         <div>
             <button (click)="login()">Login</button>
         </div> -->
-        <div>
+        <div class="col-4">
           <form [formGroup]="formdata" (ngSubmit) = "onClickSubmit(formdata.value)" >
-             <input type="text" class="fortextbox" name="user" formControlName="user">
+            <div class="form-group">
+             <input type="text" class="form-control" name="user" formControlName="user">
              <br/>
-
-             <input type="password" class="fortextbox" name="passwd" formControlName="passwd">
+            </div>
+            <div class="form-group">
+             <input type="password" class="form-control" name="passwd" formControlName="passwd">
              <br/>
+            </div>
 
-             <input type="submit" class="forsubmit" value="Log in">
+
+             <button type="submit" class="btn btn-primary forsubmit" value="Log in">Log in</button>
           </form>
        </div>
 
@@ -49,6 +53,7 @@
   <button class="btn btn-primary" (click)="loginAdmin()">Login as Admin</button> -->
   <hr />
   <p>Don't have an account?
-  <a href="signup" class="btn btn-success">Sign Up</a>
+  <a href="signup" class="btn btn-secondary">Sign Up</a>
   </p>
+</div>
 </ng-template>

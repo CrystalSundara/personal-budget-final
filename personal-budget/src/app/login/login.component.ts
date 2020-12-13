@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { DataService } from '../services/data.service';
 import { FormGroup, FormControl } from '@angular/forms';
+import { ErrorService } from '../services/error.service';
 
 
 
@@ -18,18 +19,22 @@ export class LoginComponent implements OnInit {
   user;
   passwordHash;
   formdata;
-  error = '';
+  mySubscription: any;
 
-  constructor(private navbarService: NavbarService, private dataService: DataService) {
+
+  // tslint:disable-next-line: max-line-length
+  constructor(private navbarService: NavbarService, private dataService: DataService, public errorService: ErrorService) {
     this.navbarService.getLoginStatus().subscribe(status => this.isLoggedIn = status);
   }
 
   ngOnInit() {
+    this.dataService.errMsg = '';
     this.formdata = new FormGroup({
       user: new FormControl(''),
       passwd: new FormControl('')
     });
   }
+
   onClickSubmit(data) {
     this.user = data.user;
     this.passwordHash = data.passwd;
@@ -42,6 +47,7 @@ export class LoginComponent implements OnInit {
   //   this.navbarService.updateLoginStatus(true);
   //   this.role = 'user';
   // }
+
 
   login() {
     const creds = {
@@ -67,17 +73,13 @@ export class LoginComponent implements OnInit {
       this.navbarService.updateLoginStatus(true);
       this.role = this.dataService.username;
     }
-    else {
-      this.error = data.err;
-      console.log ('Error message', data.err);
-    }
   }
 
-  loginAdmin() {
-    this.navbarService.updateNavAfterAuth('admin');
-    this.navbarService.updateLoginStatus(true);
-    this.role = 'admin';
-  }
+  // loginAdmin() {
+  //   this.navbarService.updateNavAfterAuth('admin');
+  //   this.navbarService.updateLoginStatus(true);
+  //   this.role = 'admin';
+  // }
 
 }
 

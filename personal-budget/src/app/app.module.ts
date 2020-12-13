@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgModule, ErrorHandler, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 // import {FormsModule} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -20,6 +20,8 @@ import { ContactComponent } from './contact/contact.component';
 import { D3donutComponent } from './d3donut/d3donut.component';
 
 import { DataService } from './services/data.service';
+import { ErrorService } from './services/error.service';
+import { NavbarService } from './services/navbar.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignupComponent } from './signup/signup.component';
 
@@ -52,7 +54,13 @@ import { SignupComponent } from './signup/signup.component';
     LoginComponent,
     DashboardComponent
   ],
-  providers: [DataService],
+  providers: [
+    {
+      provide: ErrorHandler,
+      useClass: ErrorService,
+     },
+     NavbarService,
+     DataService],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]
 })

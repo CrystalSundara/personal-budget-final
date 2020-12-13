@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 
 @Injectable({
@@ -30,6 +30,9 @@ export class DataService {
 
     public username;
     public token;
+    public errMsg;
+
+
 
     // public d3DataSource = {
     //   labels: [],
@@ -37,6 +40,7 @@ export class DataService {
     // };
 
   constructor(private http: HttpClient) { }
+
 
   public getData(): any {
     if (this.chartsJSDataSource.datasets[0].data.length === 0) {
