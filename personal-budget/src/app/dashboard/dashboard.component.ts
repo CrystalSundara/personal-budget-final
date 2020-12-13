@@ -2,133 +2,114 @@ import { Component, AfterViewInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { DataService } from '../services/data.service';
 import { ErrorService } from '../services/error.service';
+import { Budget } from '../services/budget';
 
 @Component({
   selector: 'pb-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
+
 export class DashboardComponent implements AfterViewInit {
+  errorMessage = '';
+  allBudget: Budget[] = [];
+  titles = [];
+  budget = [];
+  expenses = [];
+  colors = [];
+
   constructor(public dataService: DataService, public errorService: ErrorService) { }
 
   ngAfterViewInit(): void {
-    this.dataService.getChartData().subscribe((data: any) => {
-      this.createChart(data);
-      this.createRadarChart(data);
-      this.createMixedChart(data);
+    this.dataService.getAllBudgetData().subscribe({
+      next: budget => {
+        this.allBudget = budget;
+        this.populateChartData();
+        this.createPieChart();
+        this.createRadarChart();
+        this.createMixedChart();
+      },
+      error: err => this.errorMessage = err
     });
-    // console.log('Home', this.errorService.errMsg);
-    // console.log('Home', this.dataService.errMsg);
   }
 
-  createChart(data): void {
-    const chartLabels = [];
-    const values = [];
-    for (let i = 0; i < data.length; i++) {
-      chartLabels[i] = data[i].title;
-      values[i] = data[i].budget;
+  populateChartData(): void {
+    for (let i = 0; i < this.allBudget.length; i++) {
+      this.titles[i] = this.allBudget[i].title;
+      this.budget[i] = this.allBudget[i].budget;
+      this.expenses[i] = this.allBudget[i].expenses;
+      this.colors[i] = this.allBudget[i].color;
     }
+    console.log('This budget', this.budget);
+  }
 
+  createPieChart(): void {
     const canvas = document.getElementById('myChart') as HTMLCanvasElement;
     const ctx = canvas.getContext('2d');
     const myPieChart = new Chart(ctx, {
         type: 'pie',
         data: {
-          labels: chartLabels,
+          labels: this.titles,
           datasets: [
             {
-            data: values,
-            backgroundColor: [
-              '#790149',
-              '#005Fcc',
-              '#00EBC1',
-              '#A700FC',
-              '#FF6E3A',
-              '#FFDC3D',
-              '#00B408',
-              '#003D30'
-            ],
+            data: this.budget,
+            backgroundColor: this.colors,
           },
       ],
     },
   });
   }
 
-  createRadarChart(data): void {
-    const chartLabels = [];
-    const values = [];
-    for (let i = 0; i < data.length; i++) {
-      chartLabels[i] = data[i].title;
-      values[i] = data[i].budget;
-    }
-
+  createRadarChart(): void {
     const canvas = document.getElementById('radar') as HTMLCanvasElement;
     const ctx = canvas.getContext('2d');
     const myRadarChart = new Chart(ctx, {
         type: 'radar',
         data: {
-          labels: chartLabels,
+          labels: this.titles,
           datasets: [
             {
-            label: 'Total budget',
-            data: values,
+            label: 'Budget',
+            data: this.budget,
             borderColor: '#790149',
             backgroundColor: 'rgba(255, 0, 0, 0.1)'
+          },
+          {
+            label: 'Expenses',
+            data: this.expenses,
+            borderColor: '#005Fcc',
+            backgroundColor: 'rgba(0, 255, 0, 0.1)'
           },
       ],
     },
   });
   }
 
-  createMixedChart(data): void {
-    const chartLabels = [];
-    const values = [];
-    for (let i = 0; i < data.length; i++) {
-      chartLabels[i] = data[i].title;
-      values[i] = data[i].budget;
-    }
-
+  createMixedChart(): void {
     const canvas = document.getElementById('mixed') as HTMLCanvasElement;
     const ctx = canvas.getContext('2d');
     const myRadarChart = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: chartLabels,
+          labels: this.titles,
           datasets: [
             {
-              label: 'Expenses',
-              data: values,
-              backgroundColor: [
-                '#790149',
-                '#005Fcc',
-                '#00EBC1',
-                '#A700FC',
-                '#FF6E3A',
-                '#FFDC3D',
-                '#00B408',
-                '#003D30'
-              ],
-              type: 'line',
-              borderColor: '#333333',
-              fill: false
-            },
-            {
             label: 'Budget',
-            data: values,
-            backgroundColor: [
-              '#790149',
-              '#005Fcc',
-              '#00EBC1',
-              '#A700FC',
-              '#FF6E3A',
-              '#FFDC3D',
-              '#00B408',
-              '#003D30'
-            ],
+            data: this.budget,
+            backgroundColor: this.colors,
           },
-      ],
-    },
-  });
+          {
+            label: 'Expenses',
+            data: this.expenses,
+            borderWidth: 1,
+            borderColor: this.colors,
+            type: 'bar',
+            fill: false,
+            pointRadius: 10
+          },
+        ],
+      },
+    });
   }
 
 }
