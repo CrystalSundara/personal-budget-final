@@ -46,7 +46,7 @@
         <thead>
           <tr>
             <th>Title</th>
-            <th>Code</th>
+            <!-- <th>ID</th> -->
             <th>Budget</th>
             <th>Expenses</th>
             <th></th>
@@ -61,7 +61,7 @@
               </a> -->
               {{ budget.title }}
             </td>
-            <td>{{ budget.id }}</td>
+            <!-- <td>{{ budget.id }}</td> -->
             <td>{{ budget.budget }}</td>
 
             <!-- <td>{{ product.price | currency:"USD":"symbol":"1.2-2" }}</td> -->
@@ -81,7 +81,7 @@
 
                 <input #newExpense type="number" class="form-control" aria-label="expense" aria-describedby="new expense">
                 <div class="input-group-append">
-                  <button class="btn btn-outline-primary btn-sm" type="button" id="expense" (click)="addExpense(newExpense.value)">Add expense</button>
+                  <button class="btn btn-outline-primary btn-sm" type="button" id="expense" (click)="addExpense(budget, newExpense.value)">Add expense</button>
                 </div>
 
             </td>
@@ -89,9 +89,12 @@
         </tbody>
       </table>
 
-      <button class="btn btn-outline-primary btn-sm"
+      <button class="btn btn-outline-primary btn-sm mr-3"
       [routerLink]="['/budget/0/edit']">
         Add new
+      </button>
+      <button class="btn btn-outline-primary btn-sm" (click)="resetExpenses()">
+        Reset expenses
       </button>
 
     </div>

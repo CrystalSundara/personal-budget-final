@@ -1,4 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Chart } from 'chart.js';
 import { DataService } from '../services/data.service';
 import { ErrorService } from '../services/error.service';
@@ -19,7 +20,10 @@ export class DashboardComponent implements AfterViewInit {
   expenses = [];
   colors = [];
 
-  constructor(public dataService: DataService, public errorService: ErrorService) { }
+  constructor(public dataService: DataService,
+              private route: ActivatedRoute,
+              private router: Router,
+              public errorService: ErrorService) { }
 
   ngAfterViewInit(): void {
     this.dataService.getAllBudgetData().subscribe({
@@ -112,8 +116,35 @@ export class DashboardComponent implements AfterViewInit {
     });
   }
 
-  addExpense(expense) {
-    console.log('Add expense clicked', expense);
+  addExpense(budget: Budget, expense: number) {
+    budget.expenses = +budget.expenses + +expense;
+    this.dataService.updateBudget(budget)
+    .subscribe({
+      next: () => this.onSaveComplete(),
+      error: err => this.errorMessage = err
+    });
+    console.log('Add expense clicked', expense, budget.id);
+  }
+
+  onSaveComplete(): void {
+    // Reset the form to clear the flags
+    // this.newExpense.reset();
+    this.router.navigate(['/dashboard'])
+    .then(() => {
+      window.location.reload();
+    });
+  }
+
+  resetExpenses() {
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < this.allBudget.length; i++) {
+      this.allBudget[i].expenses = 0;
+      this.dataService.updateBudget(this.allBudget[i])
+        .subscribe({
+          next: () => this.onSaveComplete(),
+          error: err => this.errorMessage = err
+        });
+    }
   }
 
 }
