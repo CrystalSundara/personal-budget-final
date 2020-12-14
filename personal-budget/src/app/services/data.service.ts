@@ -10,68 +10,12 @@ import { Budget } from './budget';
 })
 export class DataService {
 
-  public chartsJSDataSource = {
-    datasets: [
-        {
-            data: [],
-            backgroundColor: [
-            '#790149',
-            '#005Fcc',
-            '#00EBC1',
-            '#A700FC',
-            '#FF6E3A',
-            '#FFDC3D',
-            '#00B408',
-            '#003D30'
-            ],
-        }
-    ],
-    // These labels appear in the legend and in the tooltips when hovering different arcs
-    labels: []
-    };
+  public username;
+  public token;
+  public errMsg;
 
-    public username;
-    public token;
-    public errMsg;
-
-
-
-    // public d3DataSource = {
-    //   labels: [],
-    //   values: []
-    // };
 
   constructor(private http: HttpClient) { }
-
-
-  public getData(): any {
-    if (this.chartsJSDataSource.datasets[0].data.length === 0) {
-      this.http.get('http://localhost:3000/budget')
-      .subscribe((res: any) =>  {
-        for (let i = 0; i < res.length; i++) {
-          this.chartsJSDataSource.datasets[0].data[i] = res[i].budget;
-          this.chartsJSDataSource.labels[i] = res[i].title;
-          // this.d3DataSource.values[i] = res[i].budget;
-          // this.d3DataSource.labels[i] = res[i].title;
-        }
-      });
-    }
-  }
-
-  getChartData(): Observable<any> {
-    return this.http.get('http://localhost:3000/budget');
-  }
-
-  // public getUserData(creds): <any> {
-  //   // return this.http.post('http://localhost:3000/api/login', creds);
-  //   this.http.post('http://localhost:3000/api/login', creds)
-  //   .subscribe((res: any) =>  {
-  //     // if(res.success === true) {
-  //       this.token = res.token;
-  //       return res;
-  //     // }
-  //   });
-  // }
 
   public getUserData(creds): any {
       const response = this.http.post('http://localhost:3000/api/login', creds);
@@ -93,11 +37,54 @@ export class DataService {
   }
 
   public getAllBudgetData(): Observable<Budget[]> {
-    return this.http.get<Budget[]>('http://localhost:3000/budget')
+    return this.http.get<Budget[]>('http://localhost:3000/api/budget')
     .pipe(
       tap(data => console.log(JSON.stringify(data))),
       catchError(this.handleError)
     );
+  }
+
+  public getBudget(id: number): Observable<Budget> {
+    if (id === 0) {
+      return of(this.initializeBudget());
+    }
+    const url = `http://localhost:3000/api/budget/${id}`;
+    return this.http.get<Budget>(url)
+    .pipe(
+      tap(data => console.log('getBudget: ', JSON.stringify(data))),
+      catchError(this.handleError)
+    );
+  }
+
+  public createBudget(budget: Budget): Observable<Budget> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    budget.id = null;
+    return this.http.post<Budget>('http://localhost:3000/api/budget', budget, { headers })
+    .pipe(
+      tap(data => console.log('createBudget: ', JSON.stringify(data))),
+      catchError(this.handleError)
+    );
+  }
+
+  public deleteBudget(id: number): Observable<{}> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = `http://localhost:3000/api/budget/${id}`;
+    return this.http.delete<Budget>(url, { headers })
+      .pipe(
+        tap(data => console.log('deleteBudget: ', id)),
+        catchError(this.handleError)
+      );
+  }
+
+  public updateBudget(budget: Budget): Observable<Budget> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = `http://localhost:3000/api/budget/${budget.id}`;
+    return this.http.put<Budget>(url, budget, { headers })
+      .pipe(
+        tap(() => console.log('updateBudget: ', budget.id)),
+        map(() => budget),
+        catchError(this.handleError)
+      );
   }
 
   private handleError(err): Observable<never> {
@@ -114,6 +101,17 @@ export class DataService {
     }
     console.error(err);
     return throwError(errorMessage);
+  }
+
+  private initializeBudget(): any {
+    // Return an initialized object
+    return [{
+      id: 0,
+      title: null,
+      budget: null,
+      color: null,
+      expenses: 0,
+    }];
   }
 
 }

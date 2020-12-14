@@ -4,6 +4,7 @@ import { DataService } from '../services/data.service';
 import { ErrorService } from '../services/error.service';
 import { Budget } from '../services/budget';
 
+
 @Component({
   selector: 'pb-dashboard',
   templateUrl: './dashboard.component.html',
@@ -40,7 +41,6 @@ export class DashboardComponent implements AfterViewInit {
       this.expenses[i] = this.allBudget[i].expenses;
       this.colors[i] = this.allBudget[i].color;
     }
-    console.log('This budget', this.budget);
   }
 
   createPieChart(): void {
@@ -110,6 +110,10 @@ export class DashboardComponent implements AfterViewInit {
         ],
       },
     });
+  }
+
+  addExpense(expense) {
+    console.log('Add expense clicked', expense);
   }
 
 }

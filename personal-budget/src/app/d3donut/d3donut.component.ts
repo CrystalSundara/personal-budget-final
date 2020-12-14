@@ -34,7 +34,7 @@ export class D3donutComponent implements OnInit {
   ngOnInit(): void {
     this.createSvg();
     // this.createColors();
-    this.dataService.getChartData().subscribe((data) => {
+    this.dataService.getAllBudgetData().subscribe((data) => {
       this.drawChart(data);
     });
     // this.drawChart();

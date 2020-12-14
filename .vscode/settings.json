@@ -2,6 +2,8 @@
     "cSpell.words": [
         "Signup",
         "creds",
-        "formdata"
+        "formdata",
+        "maxlength",
+        "minlength"
     ]
 }

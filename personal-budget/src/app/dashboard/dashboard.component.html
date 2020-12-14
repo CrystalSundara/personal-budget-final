@@ -1,11 +1,11 @@
-<main role="main" class="container center">
+<main role="main" class="container">
 
   <pb-breadcrumbs>
     <a [routerLink]="['/']">Home</a>
     <p>/</p>
     <p>Dashboard</p>>
   </pb-breadcrumbs>
-  <div class = "row">
+  <div class = "row center">
     <div class="col-6">
       <h3>ChartJS Pie Chart</h3>
       <p>
@@ -35,7 +35,7 @@
     </div>
   </div>
   <div class="card">
-    <div class="card-header">
+    <div class="card-header center">
       Budget table
     </div>
   <div class="card-body">
@@ -49,6 +49,7 @@
             <th>Code</th>
             <th>Budget</th>
             <th>Expenses</th>
+            <th></th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -66,22 +67,33 @@
             <!-- <td>{{ product.price | currency:"USD":"symbol":"1.2-2" }}</td> -->
             <td>{{ budget.expenses }}</td>
 
+
+
             <td>
               <!-- <button class="btn btn-outline-primary btn-sm"
-                      [routerLink]="['/products', product.id, 'edit']"> -->
-              <button class="btn btn-outline-primary btn-sm">
-                Edit budget
-              </button>
+                      [routerLink]="['/budget', 0, 'edit']"> -->
+                <button class="btn btn-outline-primary btn-sm mr-3"
+                [routerLink]="['/budget', budget.id, 'edit']">
+          Edit budget
+        </button>
+              </td>
+          <td class="input-group col-9">
 
-              <!-- <button class="btn btn-outline-primary btn-sm"
-                      [routerLink]="['/products', product.id, 'edit']"> -->
-              <button class="btn btn-outline-primary btn-sm">
-                Add expense
-              </button>
+                <input #newExpense type="number" class="form-control" aria-label="expense" aria-describedby="new expense">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-primary btn-sm" type="button" id="expense" (click)="addExpense(newExpense.value)">Add expense</button>
+                </div>
+
             </td>
           </tr>
         </tbody>
       </table>
+
+      <button class="btn btn-outline-primary btn-sm"
+      [routerLink]="['/budget/0/edit']">
+        Add new
+      </button>
+
     </div>
   </div>
   </div>

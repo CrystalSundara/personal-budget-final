@@ -101,18 +101,53 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-app.get('/budget', async (req, res) => {
+app.get('/api/budget', async (req, res) => {
     connection.query('SELECT * FROM chartData', function (error, results, fields) {
         if (error) throw error;
         res.json(results);
     });
 });
 
+app.get('/api/budget/:id', async (req, res) => {
+    var id = req.params.id;
+    connection.query('SELECT * FROM chartData WHERE id = ?', [id], function (error, results, fields) {
+        if (error) throw error;
+        res.json(results);
+    });
+});
+
+app.delete('/api/budget/:id', async (req, res) => {
+    var id = req.params.id;
+    connection.query('DELETE FROM chartData WHERE id = ?', [id], function (error, results, fields) {
+        if (error) throw error;
+        res.json(results);
+    });
+});
+
 app.post('/api/budget', (req, res) => {
-    const { title, budget, color } = req.body;
+    const { title, budget, color, expenses } = req.body;
     var re = new RegExp("^#(?:[0-9a-fA-F]{3}){1,2}$");
     if (re.test(color)) {
-        connection.query('INSERT INTO chartData VALUES ("", ?, ?, ?)', [title, budget, color], function (error, results, fields) {
+        connection.query('INSERT INTO chartData VALUES ("", ?, ?, ?, ?)', [title, budget, color, expenses], function (error, results, fields) {
+            // connection.end();
+            if (error) throw error;
+            res.json({ success: true });
+        });
+    }
+    else {
+        res.status(400).json({
+            success: false,
+            err: 'Color is an invalid hex format'
+        });
+    }
+});
+
+app.put('/api/budget/:id', (req, res) => {
+    const { title, budget, color, expenses } = req.body;
+    var id = req.params.id;
+    var re = new RegExp("^#(?:[0-9a-fA-F]{3}){1,2}$");
+    if (re.test(color)) {
+        connection.query('UPDATE chartData SET title = ?, budget = ?, color = ?, expenses = ? WHERE id = ?', [title, budget, color, expenses, id], function (error, results, fields) {
             // connection.end();
             if (error) throw error;
             res.json({ success: true });

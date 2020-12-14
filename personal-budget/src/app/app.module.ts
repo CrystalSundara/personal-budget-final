@@ -24,6 +24,7 @@ import { ErrorService } from './services/error.service';
 import { NavbarService } from './services/navbar.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignupComponent } from './signup/signup.component';
+import { BudgetEditComponent } from './budget-edit/budget-edit.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { SignupComponent } from './signup/signup.component';
     ContactComponent,
     D3donutComponent,
     DashboardComponent,
-    SignupComponent
+    SignupComponent,
+    BudgetEditComponent
   ],
   imports: [
     BrowserModule,
