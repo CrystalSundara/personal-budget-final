@@ -4,4 +4,5 @@ export interface Budget {
   budget: number;
   color: string;
   expenses: number;
+  username: string;
 }

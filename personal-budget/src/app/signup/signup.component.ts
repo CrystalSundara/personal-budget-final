@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
-import { DataService } from '../services/data.service';
 import { FormGroup, FormControl } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -13,10 +14,10 @@ export class SignupComponent implements OnInit {
   isLoggedIn = false;
   role = '';
   user;
-  passwordHash;
+  password;
   formdata;
 
-  constructor(private navbarService: NavbarService, private dataService: DataService) {
+  constructor(private navbarService: NavbarService, private authService: AuthService, private router: Router) {
     this.navbarService.getLoginStatus().subscribe(status => this.isLoggedIn = status);
   }
 
@@ -28,7 +29,7 @@ export class SignupComponent implements OnInit {
   }
   onClickSubmit(data) {
     this.user = data.user;
-    this.passwordHash = data.passwd;
+    this.password = data.passwd;
     this.signup();
   }
 
@@ -36,25 +37,49 @@ export class SignupComponent implements OnInit {
   signup() {
     const creds = {
         username: this.user,
-        password: this.passwordHash,
+        password: this.password,
     };
     console.log ('Creds', creds);
-    this.dataService.username = this.user;
-    this.dataService.postUserData(creds).subscribe((data) => {
+    // this.dataService.username = this.user;
+    this.authService.postUserData(creds).subscribe((data) => {
       this.signupUser(data);
       console.log('Login data', data);
     });
 }
 
+  // signupUser(data) {
+  //   if (data.success === true) {
+  //     this.dataService.token = data.token;
+  //     const token = data.token;
+  //     localStorage.setItem('jwt', token);
+  //     console.log('LoginUser data', data);
+  //     // this.navbarService.updateNavAfterAuth('user');
+  //     this.navbarService.updateLoginStatus(true);
+  //     // this.role = this.dataService.username;
+  //   }
+  // }
+
   signupUser(data) {
     if (data.success === true) {
-      this.dataService.token = data.token;
-      const token = data.token;
-      localStorage.setItem('jwt', token);
-      console.log('LoginUser data', data);
-      // this.navbarService.updateNavAfterAuth('user');
-      this.navbarService.updateLoginStatus(true);
-      // this.role = this.dataService.username;
+      this.login();
     }
   }
+
+  login() {
+    this.authService.login(
+      {
+        username: this.user,
+        password: this.password
+      }
+    )
+    .subscribe(success => {
+      if (success) {
+        this.navbarService.updateLoginStatus(true);
+        this.router.navigate(['/dashboard']);
+      }
+    });
+
+  }
+
+
 }

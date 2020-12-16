@@ -43,6 +43,7 @@ export class MenuComponent implements OnInit {
   ngOnInit() {
     this.links = this.navbarService.getLinks();
     this.navbarService.getLoginStatus().subscribe(status => this.isLoggedIn = status);
+    this.isLoggedIn = !!this.authService.getLoggedUser();
   }
 
   // logout() {
@@ -61,3 +62,6 @@ export class MenuComponent implements OnInit {
     // this.authService.logout();
   }
 }
+
+
+

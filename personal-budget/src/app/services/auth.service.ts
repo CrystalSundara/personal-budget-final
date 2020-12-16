@@ -17,6 +17,14 @@ export class AuthService {
 
   constructor(private http: HttpClient, private navbarService: NavbarService) {
     navbarService.updateLoginStatus(this.isLoggedIn());
+    this.populateUserFromToken();
+    console.log('AuthService constructor', this.loggedUser);
+  }
+
+  public postUserData(creds): any {
+    const response = this.http.post(`${config.apiUrl}/signup`, creds);
+    // this.token = response.token;
+    return response;
   }
 
   login(user: { username: string, password: string }): Observable<boolean> {
@@ -33,7 +41,7 @@ export class AuthService {
 
   logout() {
     return this.http.post<any>(`${config.apiUrl}/logout`, {
-      'refreshToken': this.getRefreshToken()
+      refreshToken: this.getRefreshToken()
     }).pipe(
       tap(() => {
         this.doLogoutUser();
@@ -55,7 +63,7 @@ export class AuthService {
 
   refreshToken() {
     return this.http.post<any>(`${config.apiUrl}/refresh`, {
-      'refreshToken': this.getRefreshToken()
+      refreshToken: this.getRefreshToken()
     }).pipe(tap((tokens: Tokens) => {
       this.storeJwtToken(tokens.jwt);
     }));
@@ -90,6 +98,16 @@ export class AuthService {
       }
       console.log('Token not expired');
       return false;
+  }
+
+  private populateUserFromToken() {
+    if (this.tokenValid()) {
+      const token = this.getJwtToken();
+      const jwtDecode = JSON.parse(atob(token.split('.')[1]));
+      this.loggedUser = jwtDecode.username;
+    } else {
+      this.loggedUser = undefined;
+    }
   }
 
   getLoggedUser() {

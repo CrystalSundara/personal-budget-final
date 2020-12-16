@@ -163,7 +163,8 @@ app.post('/api/logout', function (req, res) {
 });
 
 app.get('/api/budget', async (req, res) => {
-    connection.query('SELECT * FROM chartData', function (error, results, fields) {
+    console.log(req.query.user);
+    connection.query('SELECT * FROM chartData WHERE username = ?', [req.query.user], function (error, results, fields) {
         if (error) throw error;
         res.json(results);
     });
@@ -186,10 +187,10 @@ app.delete('/api/budget/:id', async (req, res) => {
 });
 
 app.post('/api/budget', (req, res) => {
-    const { title, budget, color, expenses } = req.body;
+    const { title, budget, color, expenses, username } = req.body;
     var re = new RegExp("^#(?:[0-9a-fA-F]{3}){1,2}$");
     if (re.test(color)) {
-        connection.query('INSERT INTO chartData VALUES ("", ?, ?, ?, ?)', [title, budget, color, expenses], function (error, results, fields) {
+        connection.query('INSERT INTO chartData VALUES ("", ?, ?, ?, ?, ?)', [title, budget, color, expenses, username], function (error, results, fields) {
             // connection.end();
             if (error) throw error;
             res.json({ success: true });

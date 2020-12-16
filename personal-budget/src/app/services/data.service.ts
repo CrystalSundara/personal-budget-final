@@ -4,24 +4,25 @@ import { Observable, of, throwError, Subject } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 
 import { Budget } from './budget';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-  public username;
-  public token;
-  public errMsg;
+  // public username;
+  // public token;
+  // public errMsg;
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, public authService: AuthService) {}
 
-  public getUserData(creds): any {
-      const response = this.http.post('http://localhost:3000/api/login', creds);
-      // this.token = response.token;
-      return response;
-  }
+  // public getUserData(creds): any {
+  //     const response = this.http.post('http://localhost:3000/api/login', creds);
+  //     // this.token = response.token;
+  //     return response;
+  // }
 
   // public postLogin (creds): Observable<any> {
   //   return this.http.post('http://localhost:3000/api/login', creds)
@@ -30,14 +31,14 @@ export class DataService {
   //     );
   // }
 
-  public postUserData(creds): any {
-    const response = this.http.post('http://localhost:3000/api/signup', creds);
-    // this.token = response.token;
-    return response;
-  }
+  // public postUserData(creds): any {
+  //   const response = this.http.post('http://localhost:3000/api/signup', creds);
+  //   // this.token = response.token;
+  //   return response;
+  // }
 
   public getAllBudgetData(): Observable<Budget[]> {
-    return this.http.get<Budget[]>('http://localhost:3000/api/budget')
+    return this.http.get<Budget[]>(`http://localhost:3000/api/budget?user=${this.authService.getLoggedUser()}`)
     .pipe(
       tap(data => console.log(JSON.stringify(data))),
       catchError(this.handleError)
@@ -111,6 +112,7 @@ export class DataService {
       budget: null,
       color: null,
       expenses: 0,
+      username: this.authService.getLoggedUser()
     }];
   }
 

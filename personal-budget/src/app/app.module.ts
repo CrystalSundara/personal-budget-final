@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler, NO_ERRORS_SCHEMA } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 // import {FormsModule} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -26,6 +26,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignupComponent } from './signup/signup.component';
 import { BudgetEditComponent } from './budget-edit/budget-edit.component';
 import { AuthGuard } from './auth.guard';
+import { AuthService } from './services/auth.service';
+import { TokenInterceptor } from './services/token.interceptor';
+
 
 
 @NgModule({
@@ -64,7 +67,14 @@ import { AuthGuard } from './auth.guard';
      },
      NavbarService,
      DataService,
-     AuthGuard],
+     AuthService,
+     AuthGuard,
+     {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]
 })

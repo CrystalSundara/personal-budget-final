@@ -1,13 +1,12 @@
 import { Injectable, ErrorHandler, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DataService } from './data.service';
 
 @Injectable({
 providedIn: 'root'
 })
 export class ErrorService implements ErrorHandler{
-  constructor(private injector: Injector, private dataService: DataService) { }
+  constructor(private injector: Injector) { }
   handleError(error: any) {
   const router = this.injector.get(Router);
   if (Error instanceof HttpErrorResponse) {
@@ -16,7 +15,6 @@ export class ErrorService implements ErrorHandler{
   else {
     console.error('Error service detected an error:', error);
     console.error('Error:', error.error.err);
-    this.dataService.errMsg = error.error.err;
   }
   // router.navigate(['login']);
   }

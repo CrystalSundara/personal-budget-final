@@ -4,6 +4,7 @@ import { Chart } from 'chart.js';
 import { DataService } from '../services/data.service';
 import { ErrorService } from '../services/error.service';
 import { Budget } from '../services/budget';
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -23,7 +24,8 @@ export class DashboardComponent implements AfterViewInit {
   constructor(public dataService: DataService,
               private route: ActivatedRoute,
               private router: Router,
-              public errorService: ErrorService) { }
+              public errorService: ErrorService,
+              public authService: AuthService) { }
 
   ngAfterViewInit(): void {
     this.dataService.getAllBudgetData().subscribe({
