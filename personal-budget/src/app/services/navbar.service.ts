@@ -10,8 +10,8 @@ export class NavbarService {
   private isLoggedIn = new Subject<boolean>();
 
   constructor() {
-    this.addItem({ text: 'Login / Sign up', path: 'login' });
-    this.isLoggedIn.next(false);
+    // this.addItem({ text: 'Login / Sign up', path: 'login' });
+    // this.isLoggedIn.next(false);
   }
 
   getLinks() {
@@ -29,17 +29,21 @@ export class NavbarService {
       this.clearAllItems();
       this.addItem({ text: 'Login / Sign up', path: 'login' });
     }
-  }
-
-  updateNavAfterAuth(role: string): void {
-    this.removeItem({ text: 'Login / Sign up' });
-
-    if (role === 'user') {
-      this.addItem({ text: 'Dashboard', path: 'dashboard' });
-    } else if (role === 'admin') {
-      this.addItem({ text: 'Admin Board', path: 'admin' });
+    else {
+      this.clearAllItems();
+      this.addItem({ text: 'Dashboard', path: 'dashboard'});
     }
   }
+
+  // updateNavAfterAuth(role: string): void {
+  //   this.removeItem({ text: 'Login / Sign up' });
+
+  //   if (role === 'user') {
+  //     this.addItem({ text: 'Dashboard', path: 'dashboard' });
+  //   } else if (role === 'admin') {
+  //     this.addItem({ text: 'Admin Board', path: 'admin' });
+  //   }
+  // }
 
   addItem({ text, path }) {
     this.links.push({ text: text, path: path });

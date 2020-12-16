@@ -25,6 +25,7 @@ import { NavbarService } from './services/navbar.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignupComponent } from './signup/signup.component';
 import { BudgetEditComponent } from './budget-edit/budget-edit.component';
+import { AuthGuard } from './auth.guard';
 
 
 @NgModule({
@@ -62,7 +63,8 @@ import { BudgetEditComponent } from './budget-edit/budget-edit.component';
       useClass: ErrorService,
      },
      NavbarService,
-     DataService],
+     DataService,
+     AuthGuard],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]
 })

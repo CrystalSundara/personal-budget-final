@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { DataService } from '../services/data.service';
 import * as d3 from 'd3';
 
@@ -7,7 +7,7 @@ import * as d3 from 'd3';
   templateUrl: './d3donut.component.html',
   styleUrls: ['./d3donut.component.scss']
 })
-export class D3donutComponent implements OnInit {
+export class D3donutComponent implements AfterViewInit {
 
   // private data = [s
   //   {title: 'Eat out', budget: '30'},
@@ -31,7 +31,7 @@ export class D3donutComponent implements OnInit {
   constructor(private dataService: DataService) { }
 
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.createSvg();
     // this.createColors();
     this.dataService.getAllBudgetData().subscribe((data) => {

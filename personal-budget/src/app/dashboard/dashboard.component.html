@@ -62,10 +62,10 @@
               {{ budget.title }}
             </td>
             <!-- <td>{{ budget.id }}</td> -->
-            <td>{{ budget.budget }}</td>
+            <td>${{ budget.budget }}</td>
 
             <!-- <td>{{ product.price | currency:"USD":"symbol":"1.2-2" }}</td> -->
-            <td>{{ budget.expenses }}</td>
+            <td>${{ budget.expenses }}</td>
 
 
 
@@ -79,9 +79,9 @@
               </td>
           <td class="input-group col-9">
 
-                <input #newExpense type="number" class="form-control" aria-label="expense" aria-describedby="new expense">
+                <input #newExpense type="number" class="form-control" aria-label="expense" aria-describedby="new expense" placeholder="$" >
                 <div class="input-group-append">
-                  <button class="btn btn-outline-primary btn-sm" type="button" id="expense" (click)="addExpense(budget, newExpense.value)">Add expense</button>
+                  <button class="btn btn-outline-primary btn-sm" type="button" id="expense" (click)="addExpense(budget, newExpense.value)">Modify expenses</button>
                 </div>
 
             </td>

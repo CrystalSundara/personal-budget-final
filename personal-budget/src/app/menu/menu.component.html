@@ -17,7 +17,7 @@
         <a class="nav-link" [routerLink]="link.path">{{ link.text }}</a>
       </li>
       <li class="nav-item" *ngIf="isLoggedIn">
-        <a class="nav-link" routerLink="logout" (click)="logout()">Logout</a>
+        <a class="nav-link" routerLink="home" (click)="logout()">Logout</a>
       </li>
     </ul>
   </div>

@@ -52,9 +52,9 @@ export class SignupComponent implements OnInit {
       const token = data.token;
       localStorage.setItem('jwt', token);
       console.log('LoginUser data', data);
-      this.navbarService.updateNavAfterAuth('user');
+      // this.navbarService.updateNavAfterAuth('user');
       this.navbarService.updateLoginStatus(true);
-      this.role = this.dataService.username;
+      // this.role = this.dataService.username;
     }
   }
 }

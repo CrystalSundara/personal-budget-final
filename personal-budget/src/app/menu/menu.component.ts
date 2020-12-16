@@ -20,6 +20,8 @@ import { Router } from '@angular/router';
 import { LoginComponent } from '../login/login.component';
 import { NavbarService } from '../services/navbar.service';
 import { DashboardComponent } from '../dashboard/dashboard.component';
+import { AuthService } from '../services/auth.service';
+import { AuthGuard } from '../auth.guard';
 
 @Component({
   selector: 'pb-menu',
@@ -29,12 +31,12 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
 export class MenuComponent implements OnInit {
 
   links: Array<{ text: string, path: string }>;
-  isLoggedIn = false;
+  isLoggedIn = null;
 
-  constructor(private router: Router, private navbarService: NavbarService) {
+  constructor(private router: Router, private navbarService: NavbarService, private authService: AuthService) {
     this.router.config.unshift(
       { path: 'login', component: LoginComponent },
-      { path: 'dashboard', component: DashboardComponent },
+      { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], canLoad: [AuthGuard] },
     );
   }
 
@@ -43,10 +45,19 @@ export class MenuComponent implements OnInit {
     this.navbarService.getLoginStatus().subscribe(status => this.isLoggedIn = status);
   }
 
-  logout() {
-    this.navbarService.updateLoginStatus(false);
-    localStorage.removeItem('jwt');
-    this.router.navigate(['home']);
-  }
+  // logout() {
+  //   this.navbarService.updateLoginStatus(false);
+  //   localStorage.removeItem('jwt');
+  //   this.router.navigate(['home']);
+  // }
 
+  logout() {
+    this.authService.logout()
+      .subscribe(success => {
+        if (success) {
+          this.router.navigate(['home']);
+        }
+      });
+    // this.authService.logout();
+  }
 }

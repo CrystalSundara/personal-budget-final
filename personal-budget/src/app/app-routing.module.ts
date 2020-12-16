@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, CanActivate } from '@angular/router';
 import { HomepageComponent } from './homepage/homepage.component';
 import { AboutComponent } from './about/about.component';
 import { LoginComponent } from './login/login.component';
@@ -9,6 +9,7 @@ import { ContactComponent } from './contact/contact.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BudgetEditComponent } from './budget-edit/budget-edit.component';
+import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
   // {
@@ -43,17 +44,23 @@ const routes: Routes = [
   {
     path: 'contact',
     component: ContactComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard]
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard]
   },
   {
     path: 'budget/:id/edit',
     component: BudgetEditComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard]
   },
   {
     path: '**',

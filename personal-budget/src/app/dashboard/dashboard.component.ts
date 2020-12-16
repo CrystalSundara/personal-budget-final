@@ -76,11 +76,15 @@ export class DashboardComponent implements AfterViewInit {
             label: 'Budget',
             data: this.budget,
             borderColor: '#790149',
+            pointBorderColor: this.colors,
+            pointRadius: 5,
             backgroundColor: 'rgba(255, 0, 0, 0.1)'
           },
           {
             label: 'Expenses',
             data: this.expenses,
+            pointBorderColor: this.colors,
+            pointRadius: 5,
             borderColor: '#005Fcc',
             backgroundColor: 'rgba(0, 255, 0, 0.1)'
           },
@@ -105,7 +109,7 @@ export class DashboardComponent implements AfterViewInit {
           {
             label: 'Expenses',
             data: this.expenses,
-            borderWidth: 1,
+            borderWidth: 2,
             borderColor: this.colors,
             type: 'bar',
             fill: false,

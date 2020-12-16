@@ -4,8 +4,6 @@
     <a [routerLink]="['/']">Home</a>
   </pb-breadcrumbs>
 
-  <p>Data Service message: {{ dataService.errMsg }}</p>
-
   <section class="page-area">
 
     <pb-article>
@@ -65,16 +63,23 @@
         </paragraph>
     </pb-article>
 
-    <article>
+    <pb-article>
+      <h3>Free</h3>
+      <paragraph>
+          This app is free!!! And you are the only one holding your data!
+      </paragraph>
+    </pb-article>
+
+    <!-- <article>
         <h3>Free</h3>
         <p>
             <canvas id="myChart" width="400px" height="400px"></canvas>
         </p>
-    </article>
+    </article> -->
 
   </section>
-  <section class="donut">
+  <!-- <section class="donut">
     <pb-d3donut></pb-d3donut>
-  </section>
+  </section> -->
 
 </main>

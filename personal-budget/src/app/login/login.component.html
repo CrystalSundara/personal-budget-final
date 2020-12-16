@@ -11,13 +11,18 @@
 </main> -->
 
 <div *ngIf="isLoggedIn; else loggedOut">
-  Logged in as {{role}}.
+  Logged in as {{ authService.getLoggedUser() }}.
 </div>
+
+
 
 <ng-template #loggedOut>
   <div class="container">
+    <div class="alert alert-danger" *ngIf="sessionExpired">
+      Your session is expired. Please login again.
+    </div>
     <h1>Login</h1>
-      <p class="error">{{ dataService.errMsg }}</p>
+      <!-- <p class="error">{{ dataService.errMsg }}</p> -->
 
         <!-- <div class="row">
           <label for="username">User name</label>
