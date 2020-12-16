@@ -163,7 +163,7 @@ app.post('/api/logout', function (req, res) {
 });
 
 app.get('/api/budget', async (req, res) => {
-    console.log(req.query.user);
+    // console.log(req.query.user);
     connection.query('SELECT * FROM chartData WHERE username = ?', [req.query.user], function (error, results, fields) {
         if (error) throw error;
         res.json(results);

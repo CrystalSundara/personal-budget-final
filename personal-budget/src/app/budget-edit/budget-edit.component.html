@@ -1,3 +1,11 @@
+<main role="main" class="container center">
+
+  <pb-breadcrumbs>
+    <a [routerLink]="['/']">Home</a>
+    <p> &nbsp;&nbsp;/&nbsp;&nbsp; </p>
+    <p>About</p>>
+  </pb-breadcrumbs>
+
 <div class="card">
   <div class="card-header">
     {{pageTitle}}
@@ -89,3 +97,4 @@
        *ngIf="errorMessage">{{errorMessage}}
   </div>
 </div>
+</main>

@@ -1,4 +1,16 @@
-@import "~bootstrap/dist/css/bootstrap.css";
+
+$primary: rebeccapurple;
+$danger: #dd0000;
+$success: lime;
+$warning: orange;
+$info: aqua;
+
+$body-bg: #f3f3f0;
+
+@import "bootstrap";
+
+// @import "~bootstrap/dist/css/bootstrap.css";
+
 
 div.card-header {
   font-size: large;
