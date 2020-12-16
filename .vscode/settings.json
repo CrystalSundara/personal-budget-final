@@ -1,9 +1,12 @@
 {
     "cSpell.words": [
         "Signup",
+        "bcrypted",
         "creds",
         "formdata",
+        "freemysqlhosting",
         "maxlength",
-        "minlength"
+        "minlength",
+        "randtoken"
     ]
 }

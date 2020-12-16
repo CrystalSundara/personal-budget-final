@@ -1,16 +1,46 @@
-const express = require('express');
-const mysql = require ('mysql');
-const bcrypt= require('bcrypt');
+const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
+const randtoken = require('rand-token');
+const passport = require('passport');
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
 const cors = require('cors');
-
-
+const express = require('express');
 const app = express();
+
+const refreshTokens = {};
+const SECRET = 'VERY_SECRET_KEY!';
+const passportOpts = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: SECRET
+};
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(cors());
 
-const jwt = require('jsonwebtoken');
+passport.use(new JwtStrategy(passportOpts, function (jwtPayload, done) {
+  const expirationDate = new Date(jwtPayload.exp * 1000);
+  if(expirationDate < new Date()) {
+    return done(null, false);
+  }
+  done(null, jwtPayload);
+}))
+
+passport.serializeUser(function (user, done) {
+  done(null, user.username)
+});
+
+
+const mysql = require ('mysql');
+const bcrypt= require('bcrypt');
 const exjwt = require('express-jwt');
-const bodyParser = require('body-parser');
 const path = require('path');
+
+const PORT = 3000;
+
 
 // app.use((req, res, next) => {
 //     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -18,18 +48,14 @@ const path = require('path');
 //     next();
 // });
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
-const PORT = 3000;
+// const secretKey = 'My super secret key';
+// const jwtMW = exjwt( {
+//     secret: secretKey,
+//     algorithms: ['HS256']
+// });
 
-const secretKey = 'My super secret key';
-const jwtMW = exjwt( {
-    secret: secretKey,
-    algorithms: ['HS256']
-});
-
-var connection = mysql.createConnection({
+var connection = mysql.createPool({
     host    : 'sql9.freemysqlhosting.net',
     user    : 'sql9373732',
     password: 's9JcgFxjXZ',
@@ -61,9 +87,10 @@ app.post('/api/signup', (req, res) => {
 //     });
 // });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'index.html'));
+// });
+
 
 
 app.post('/api/login', (req, res) => {
@@ -83,12 +110,21 @@ app.post('/api/login', (req, res) => {
         }
         else {
             if (bcrypt.compareSync(password, results[0].password)) {
-                let token = jwt.sign({id: results[0].id, username: results[0].username}, secretKey, { expiresIn: '1m' });
-                res.json({
-                    success: true,
-                    err: null,
-                    token
-                });
+                // let token = jwt.sign({id: results[0].id, username: results[0].username}, secretKey, { expiresIn: '1m' });
+                // res.json({
+                //     success: true,
+                //     err: null,
+                //     token
+                const {username, password} = req.body;
+                const user = { 
+                    'username': username, 
+                    'role': 'admin'
+                };
+                const token = jwt.sign(user, SECRET, { expiresIn: '1m' }) 
+                const refreshToken = randtoken.uid(256);
+                refreshTokens[refreshToken] = username;
+                res.json({jwt: token, refreshToken: refreshToken});
+                // });
             }
             else { 
                 res.status(401).json({
@@ -99,6 +135,31 @@ app.post('/api/login', (req, res) => {
             }
         }
     });
+});
+
+app.post('/api/logout', function (req, res) { 
+    const refreshToken = req.body.refreshToken;
+    if (refreshToken in refreshTokens) { 
+      delete refreshTokens[refreshToken];
+    } 
+    res.sendStatus(204); 
+  });
+
+  app.post('/api/refresh', function (req, res) {
+    const refreshToken = req.body.refreshToken;
+    
+
+    if (refreshToken in refreshTokens) {
+      const user = {
+        'username': refreshTokens[refreshToken],
+        'role': 'admin'
+      }
+      const token = jwt.sign(user, SECRET, { expiresIn: 600 });
+      res.json({jwt: token})
+    }
+    else {
+      res.sendStatus(401);
+    }
 });
 
 app.get('/api/budget', async (req, res) => {
@@ -162,26 +223,26 @@ app.put('/api/budget/:id', (req, res) => {
 });
 
 
-app.get('/api/dashboard', jwtMW, (req, res) => {
-    res.json({
-        success: true,
-        myContent: 'Secret content that only logged in people can see.'
-    });
-});
+// app.get('/api/dashboard', jwtMW, (req, res) => {
+//     res.json({
+//         success: true,
+//         myContent: 'Secret content that only logged in people can see.'
+//     });
+// });
 
-app.get('/api/settings', jwtMW, (req, res) => {
-    res.json({
-        success: true,
-        myContent: 'Here you can set all the things.'
-    });
-});
+// app.get('/api/settings', jwtMW, (req, res) => {
+//     res.json({
+//         success: true,
+//         myContent: 'Here you can set all the things.'
+//     });
+// });
 
-app.get('/api/timeout', (req, res) => {
-    res.json({
-        success: true,
-        myContent: 'Sorry, your session has timed out. You will be redirected to the login page in 5 seconds.'
-    });
-});
+// app.get('/api/timeout', (req, res) => {
+//     res.json({
+//         success: true,
+//         myContent: 'Sorry, your session has timed out. You will be redirected to the login page in 5 seconds.'
+//     });
+// });
 
 // Redirect to index.html
 // app.get('/', (req, res) => {
@@ -189,25 +250,25 @@ app.get('/api/timeout', (req, res) => {
 // });
 
 
-app.use(function (err, req, res, next) {
-    if (err.name === 'UnauthorizedError' && err.inner.name === 'TokenExpiredError') {
-        res.status(401).json({
-            success: false,
-            officialError: err,
-            err: 'Token is expired'
-        });
-    }
-    else if (err.name === 'UnauthorizedError') {
-        res.status(401).json({
-            success: false,
-            officialError: err,
-            err: 'Username or password is incorrect 2'
-        }); 
-    }
-    else {
-        next(err);
-    }
-});
+// app.use(function (err, req, res, next) {
+//     if (err.name === 'UnauthorizedError' && err.inner.name === 'TokenExpiredError') {
+//         res.status(401).json({
+//             success: false,
+//             officialError: err,
+//             err: 'Token is expired'
+//         });
+//     }
+//     else if (err.name === 'UnauthorizedError') {
+//         res.status(401).json({
+//             success: false,
+//             officialError: err,
+//             err: 'Username or password is incorrect 2'
+//         }); 
+//     }
+//     else {
+//         next(err);
+//     }
+// });
 
 app.listen(PORT, () => {
     console.log(`Serving on port ${PORT}`);

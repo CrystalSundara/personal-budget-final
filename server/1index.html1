@@ -130,7 +130,7 @@
         // onLoad();
 
         addEventListener("popstate", function (e) {
-            location.reload();
+            location.reload(); 
             e.preventDefault();
         });
 
