@@ -28,6 +28,7 @@ import { BudgetEditComponent } from './budget-edit/budget-edit.component';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './services/auth.service';
 import { TokenInterceptor } from './services/token.interceptor';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 
 
@@ -73,6 +74,10 @@ import { TokenInterceptor } from './services/token.interceptor';
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
+    },
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy
     }
   ],
   bootstrap: [AppComponent],

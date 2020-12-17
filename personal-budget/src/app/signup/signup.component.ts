@@ -30,7 +30,7 @@ export class SignupComponent implements OnInit {
   onClickSubmit(data) {
     this.user = data.user;
     this.password = data.passwd;
-    this.signup();
+    if (this.user && this.password) { this.signup(); }
   }
 
 
@@ -39,11 +39,11 @@ export class SignupComponent implements OnInit {
         username: this.user,
         password: this.password,
     };
-    console.log ('Creds', creds);
+    // console.log ('Creds', creds);
     // this.dataService.username = this.user;
     this.authService.postUserData(creds).subscribe((data) => {
       this.signupUser(data);
-      console.log('Login data', data);
+      // console.log('Login data', data);
     });
 }
 

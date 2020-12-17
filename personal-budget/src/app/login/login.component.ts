@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
   onClickSubmit(data) {
     this.user = data.user;
     this.password = data.passwd;
-    this.login();
+    if (this.user && this.password) { this.login(); }
   }
 
   login() {
