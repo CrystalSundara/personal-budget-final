@@ -1,19 +1,3 @@
-// import { Component, OnInit } from '@angular/core';
-
-// @Component({
-//   selector: 'pb-menu',
-//   templateUrl: './menu.component.html',
-//   styleUrls: ['./menu.component.scss']
-// })
-// export class MenuComponent implements OnInit {
-
-//   constructor() { }
-
-//   ngOnInit(): void {
-//   }
-
-// }
-
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -46,11 +30,6 @@ export class MenuComponent implements OnInit {
     this.isLoggedIn = !!this.authService.getLoggedUser();
   }
 
-  // logout() {
-  //   this.navbarService.updateLoginStatus(false);
-  //   localStorage.removeItem('jwt');
-  //   this.router.navigate(['home']);
-  // }
 
   logout() {
     this.authService.logout()
@@ -59,7 +38,6 @@ export class MenuComponent implements OnInit {
           this.router.navigate(['home']);
         }
       });
-    // this.authService.logout();
   }
 }
 

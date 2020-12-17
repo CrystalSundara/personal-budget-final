@@ -8,5 +8,6 @@
         "maxlength",
         "minlength",
         "randtoken"
-    ]
+    ],
+    "editor.formatOnSave": true
 }

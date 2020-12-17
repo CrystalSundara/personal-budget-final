@@ -47,18 +47,6 @@ export class SignupComponent implements OnInit {
     });
 }
 
-  // signupUser(data) {
-  //   if (data.success === true) {
-  //     this.dataService.token = data.token;
-  //     const token = data.token;
-  //     localStorage.setItem('jwt', token);
-  //     console.log('LoginUser data', data);
-  //     // this.navbarService.updateNavAfterAuth('user');
-  //     this.navbarService.updateLoginStatus(true);
-  //     // this.role = this.dataService.username;
-  //   }
-  // }
-
   signupUser(data) {
     if (data.success === true) {
       this.login();

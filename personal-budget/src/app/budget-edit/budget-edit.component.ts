@@ -112,7 +112,7 @@ export class BudgetEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (id === 0) {
       this.pageTitle = 'Add Budget';
-      console.log('Add budget id', budget);
+      // console.log('Add budget id', budget);
     } else {
       this.pageTitle = `Edit Budget: ${this.budget.title}`;
           // Update the data on the form

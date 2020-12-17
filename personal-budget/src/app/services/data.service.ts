@@ -6,6 +6,8 @@ import { catchError, tap, map } from 'rxjs/operators';
 import { Budget } from './budget';
 import { AuthService } from './auth.service';
 
+import { config } from './../config';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -38,7 +40,7 @@ export class DataService {
   // }
 
   public getAllBudgetData(): Observable<Budget[]> {
-    return this.http.get<Budget[]>(`http://localhost:3000/api/budget?user=${this.authService.getLoggedUser()}`)
+    return this.http.get<Budget[]>(`${config.apiUrl}/budget?user=${this.authService.getLoggedUser()}`)
     .pipe(
       tap(data => console.log(JSON.stringify(data))),
       catchError(this.handleError)
@@ -49,7 +51,7 @@ export class DataService {
     if (id === 0) {
       return of(this.initializeBudget());
     }
-    const url = `http://localhost:3000/api/budget/${id}`;
+    const url = `${config.apiUrl}/budget/${id}`;
     return this.http.get<Budget>(url)
     .pipe(
       tap(data => console.log('getBudget: ', JSON.stringify(data))),
@@ -60,7 +62,7 @@ export class DataService {
   public createBudget(budget: Budget): Observable<Budget> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     budget.id = null;
-    return this.http.post<Budget>('http://localhost:3000/api/budget', budget, { headers })
+    return this.http.post<Budget>(`${config.apiUrl}/budget`, budget, { headers })
     .pipe(
       tap(data => console.log('createBudget: ', JSON.stringify(data))),
       catchError(this.handleError)
@@ -69,7 +71,7 @@ export class DataService {
 
   public deleteBudget(id: number): Observable<{}> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const url = `http://localhost:3000/api/budget/${id}`;
+    const url = `${config.apiUrl}/budget/${id}`;
     return this.http.delete<Budget>(url, { headers })
       .pipe(
         tap(data => console.log('deleteBudget: ', id)),
@@ -79,7 +81,7 @@ export class DataService {
 
   public updateBudget(budget: Budget): Observable<Budget> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const url = `http://localhost:3000/api/budget/${budget.id}`;
+    const url = `${config.apiUrl}/budget/${budget.id}`;
     return this.http.put<Budget>(url, budget, { headers })
       .pipe(
         tap(() => console.log('updateBudget: ', budget.id)),

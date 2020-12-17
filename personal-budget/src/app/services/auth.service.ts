@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ErrorHandler } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { of, Observable } from 'rxjs';
 import { catchError, mapTo, tap } from 'rxjs/operators';
 import { config } from './../config';
 import { Tokens } from '../services/tokens';
 import { NavbarService } from './navbar.service';
+import { ErrorService } from './error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,26 +16,42 @@ export class AuthService {
   private readonly REFRESH_TOKEN = 'PB_REFRESH_TOKEN';
   private loggedUser: string;
 
-  constructor(private http: HttpClient, private navbarService: NavbarService) {
+  constructor(private http: HttpClient, private navbarService: NavbarService, private errorService: ErrorService) {
     navbarService.updateLoginStatus(this.isLoggedIn());
     this.populateUserFromToken();
-    console.log('AuthService constructor', this.loggedUser);
+    // console.log('AuthService constructor', this.loggedUser);
   }
 
   public postUserData(creds): any {
-    const response = this.http.post(`${config.apiUrl}/signup`, creds);
-    // this.token = response.token;
-    return response;
+    // const response = this.http.post(`${config.apiUrl}/signup`, creds);
+    // return response;
+    return this.http.post<any>(`${config.apiUrl}/signup`, creds)
+    .pipe(
+      // tap(tokens => this.doLoginUser(user.username, this.initializeToken(tokens))),
+      tap((response) => {
+        console.log('signup', response);
+        if (response.errno != null) {this.errorService.handleError(response); }
+      }),
+      catchError(error => {
+        // this.errorService.handleError(error.error);
+        alert(error);
+        return of(false);
+      }));
   }
 
   login(user: { username: string, password: string }): Observable<boolean> {
     return this.http.post<any>(`${config.apiUrl}/login`, user)
       .pipe(
         // tap(tokens => this.doLoginUser(user.username, this.initializeToken(tokens))),
-        tap(tokens => this.doLoginUser(user.username, tokens)),
+        tap((tokens) => {
+          console.log (tokens);
+          this.doLoginUser(user.username, tokens);
+        }),
         mapTo(true),
         catchError(error => {
-          alert(error.error);
+          console.log('catch', error);
+          this.errorService.handleError(error);
+          alert(error);
           return of(false);
         }));
   }
@@ -49,6 +66,7 @@ export class AuthService {
       }),
       mapTo(true),
       catchError(error => {
+        this.errorService.handleError(error.error);
         alert(error.error);
         return of(false);
       }));
@@ -140,7 +158,7 @@ export class AuthService {
     localStorage.setItem(this.REFRESH_TOKEN, tokens.refreshToken);
   }
 
-  private removeTokens() {
+  public removeTokens() {
     localStorage.removeItem(this.JWT_TOKEN);
     localStorage.removeItem(this.REFRESH_TOKEN);
   }

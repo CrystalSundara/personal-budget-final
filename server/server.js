@@ -36,24 +36,9 @@ passport.serializeUser(function (user, done) {
 
 const mysql = require ('mysql');
 const bcrypt= require('bcrypt');
-const exjwt = require('express-jwt');
-const path = require('path');
 
 const PORT = 3000;
 
-
-// app.use((req, res, next) => {
-//     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-//     res.setHeader('Access-Control-Allow-Headers', 'Content-type-Authorization');
-//     next();
-// });
-
-
-// const secretKey = 'My super secret key';
-// const jwtMW = exjwt( {
-//     secret: secretKey,
-//     algorithms: ['HS256']
-// });
 
 var connection = mysql.createPool({
     host    : 'sql9.freemysqlhosting.net',
@@ -67,29 +52,22 @@ app.post('/api/signup', (req, res) => {
     const date = new Date();
     const sqlDate = date.toISOString().split("T")[0];
     const bcryptedPassword = bcrypt.hashSync(password, 8); 
-    // bcrypt.hash(password, 8, function( err, bcryptedPassword) {
-        // connection.connect();
         connection.query('INSERT INTO users VALUES ("", ?, ?, ?)', [username, bcryptedPassword, sqlDate], function (error, results, fields) {
-            // connection.end();
-            if (error) throw error;
-            res.json({ success: true });
+            if (error) {
+                res.json(callback(error));
+            } else {
+                res.json({ success: true });
+            }
         });
-    // });
 });
 
-// app.get('/', async (req, res) => {
-//     connection.connect();
-
-//     connection.query('SELECT * FROM users', function (error, results, fields) {
-//         connection.end();
-//         if (error) throw error;
-//         res.json(results);
-//     });
-// });
-
-// app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'index.html'));
-// });
+let callback = (error, result) => {
+    if (error !== null) {
+    console.log("Caught error: " + String(error));
+    return error;
+    }
+    return result;
+  };
 
 
 
@@ -97,41 +75,37 @@ app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
     // console.log ("username", username);
     // console.log ("password", password);
-    // connection.connect();
     connection.query('SELECT * FROM users WHERE username = ?', [username], function (error, results, fields) {
         // connection.end();
-        if (error) throw error;
-        if (results.length == 0){
-            res.status(401).json({
-                success: false,
-                token: null,
-                err: 'Username is incorrect'
-            });
-        }
-        else {
-            if (bcrypt.compareSync(password, results[0].password)) {
-                // let token = jwt.sign({id: results[0].id, username: results[0].username}, secretKey, { expiresIn: '1m' });
-                // res.json({
-                //     success: true,
-                //     err: null,
-                //     token
-                const {username, password} = req.body;
-                const user = { 
-                    'username': username, 
-                    'role': 'admin'
-                };
-                const token = jwt.sign(user, SECRET, { expiresIn: '1m' }) 
-                const refreshToken = randtoken.uid(256);
-                refreshTokens[refreshToken] = username;
-                res.json({jwt: token, refreshToken: refreshToken});
-                // });
-            }
-            else { 
+        if (error) {
+            res.json(callback(error));
+        } else {
+            if (results.length == 0){
                 res.status(401).json({
                     success: false,
                     token: null,
-                    err: 'Password is incorrect'
+                    err: 'Username is incorrect'
                 });
+            }
+            else {
+                if (bcrypt.compareSync(password, results[0].password)) {
+                    const {username, password} = req.body;
+                    const user = { 
+                        'username': username, 
+                        'role': 'admin'
+                    };
+                    const token = jwt.sign(user, SECRET, { expiresIn: '1m' }) 
+                    const refreshToken = randtoken.uid(256);
+                    refreshTokens[refreshToken] = username;
+                    res.json({jwt: token, refreshToken: refreshToken});
+                }
+                else { 
+                    res.status(401).json({
+                        success: false,
+                        token: null,
+                        err: 'Password is incorrect'
+                    });
+                }
             }
         }
     });
@@ -163,26 +137,34 @@ app.post('/api/logout', function (req, res) {
 });
 
 app.get('/api/budget', async (req, res) => {
-    // console.log(req.query.user);
     connection.query('SELECT * FROM chartData WHERE username = ?', [req.query.user], function (error, results, fields) {
-        if (error) throw error;
-        res.json(results);
+        if (error) {
+            res.json(callback(error));
+        } else {
+            res.json(results);
+        }
     });
 });
 
 app.get('/api/budget/:id', async (req, res) => {
     var id = req.params.id;
     connection.query('SELECT * FROM chartData WHERE id = ?', [id], function (error, results, fields) {
-        if (error) throw error;
-        res.json(results);
+        if (error) {
+            res.json(callback(error));
+        } else {
+            res.json(results);
+        }
     });
 });
 
 app.delete('/api/budget/:id', async (req, res) => {
     var id = req.params.id;
     connection.query('DELETE FROM chartData WHERE id = ?', [id], function (error, results, fields) {
-        if (error) throw error;
-        res.json(results);
+        if (error) {
+            res.json(callback(error));
+        } else {
+            res.json(results);
+        }
     });
 });
 
@@ -191,9 +173,11 @@ app.post('/api/budget', (req, res) => {
     var re = new RegExp("^#(?:[0-9a-fA-F]{3}){1,2}$");
     if (re.test(color)) {
         connection.query('INSERT INTO chartData VALUES ("", ?, ?, ?, ?, ?)', [title, budget, color, expenses, username], function (error, results, fields) {
-            // connection.end();
-            if (error) throw error;
-            res.json({ success: true });
+            if (error) {
+                res.json(callback(error));
+            } else {            
+                res.json({ success: true });
+            }
         });
     }
     else {
@@ -210,9 +194,11 @@ app.put('/api/budget/:id', (req, res) => {
     var re = new RegExp("^#(?:[0-9a-fA-F]{3}){1,2}$");
     if (re.test(color)) {
         connection.query('UPDATE chartData SET title = ?, budget = ?, color = ?, expenses = ? WHERE id = ?', [title, budget, color, expenses, id], function (error, results, fields) {
-            // connection.end();
-            if (error) throw error;
-            res.json({ success: true });
+            if (error) {
+                res.json(callback(error));
+            } else {            
+                res.json({ success: true });
+            }
         });
     }
     else {
@@ -223,53 +209,6 @@ app.put('/api/budget/:id', (req, res) => {
     }
 });
 
-
-// app.get('/api/dashboard', jwtMW, (req, res) => {
-//     res.json({
-//         success: true,
-//         myContent: 'Secret content that only logged in people can see.'
-//     });
-// });
-
-// app.get('/api/settings', jwtMW, (req, res) => {
-//     res.json({
-//         success: true,
-//         myContent: 'Here you can set all the things.'
-//     });
-// });
-
-// app.get('/api/timeout', (req, res) => {
-//     res.json({
-//         success: true,
-//         myContent: 'Sorry, your session has timed out. You will be redirected to the login page in 5 seconds.'
-//     });
-// });
-
-// Redirect to index.html
-// app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'index.html'));
-// });
-
-
-// app.use(function (err, req, res, next) {
-//     if (err.name === 'UnauthorizedError' && err.inner.name === 'TokenExpiredError') {
-//         res.status(401).json({
-//             success: false,
-//             officialError: err,
-//             err: 'Token is expired'
-//         });
-//     }
-//     else if (err.name === 'UnauthorizedError') {
-//         res.status(401).json({
-//             success: false,
-//             officialError: err,
-//             err: 'Username or password is incorrect 2'
-//         }); 
-//     }
-//     else {
-//         next(err);
-//     }
-// });
 
 app.listen(PORT, () => {
     console.log(`Serving on port ${PORT}`);
