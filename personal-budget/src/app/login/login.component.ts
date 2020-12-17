@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   isLoggedIn = false;
   role = '';
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
     this.navbarService.getLoginStatus().subscribe(status => this.isLoggedIn = status);
     if (!!authService.getJwtToken()) {
       this.sessionExpired = authService.tokenExpired();
-      this.authService.removeTokens();
+      // this.authService.logout();
     }
     else { this.sessionExpired = false; }
   }
@@ -40,6 +40,10 @@ export class LoginComponent implements OnInit {
       user: new FormControl(''),
       passwd: new FormControl('')
     });
+  }
+
+  ngOnDestroy() {
+    // this.navbarService.getLoginStatus().unsubscribe();
   }
 
   onClickSubmit(data) {

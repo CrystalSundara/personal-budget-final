@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginComponent } from '../login/login.component';
 import { NavbarService } from '../services/navbar.service';
@@ -12,7 +12,7 @@ import { AuthGuard } from '../auth.guard';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
 
   links: Array<{ text: string, path: string }>;
   isLoggedIn = null;
@@ -30,14 +30,19 @@ export class MenuComponent implements OnInit {
     this.isLoggedIn = !!this.authService.getLoggedUser();
   }
 
+  ngOnDestroy() {
+    // this.navbarService.getLoginStatus().unsubscribe();
+  }
+
 
   logout() {
-    this.authService.logout()
+    const sub = this.authService.logout()
       .subscribe(success => {
         if (success) {
           this.router.navigate(['home']);
         }
       });
+    // sub.unsubscribe();
   }
 }
 

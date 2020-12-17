@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   role = '';
   user;
@@ -27,6 +27,11 @@ export class SignupComponent implements OnInit {
       passwd: new FormControl('')
     });
   }
+
+  ngOnDestroy() {
+    // this.navbarService.getLoginStatus().unsubscribe();
+  }
+
   onClickSubmit(data) {
     this.user = data.user;
     this.password = data.passwd;

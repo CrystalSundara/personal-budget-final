@@ -15,6 +15,7 @@ export class ErrorService implements ErrorHandler{
   else {
     console.error('Error service detected an error:', error);
     if (error.sqlMessage) {alert(error.sqlMessage); }
+    // throw error;
     // console.error('Error:', error.error.err);
   }
   // router.navigate(['login']);
