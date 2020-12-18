@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   isLoggedIn = false;
   role = '';
@@ -21,25 +21,29 @@ export class LoginComponent implements OnInit {
   formdata;
   mySubscription: any;
   sessionExpired = false;
+  navSub;
 
 
   constructor(private authService: AuthService,
               private navbarService: NavbarService,
-              private router: Router)
-  {
-    this.navbarService.getLoginStatus().subscribe(status => this.isLoggedIn = status);
-    if (!!authService.getJwtToken()) {
-      this.sessionExpired = authService.tokenExpired();
-      this.authService.removeTokens();
-    }
-    else { this.sessionExpired = false; }
-  }
+              private router: Router) {}
+
 
   ngOnInit() {
+    this.navbarService.getLoginStatus().subscribe(status => this.isLoggedIn = status);
+    if (!!this.authService.getJwtToken()) {
+      this.sessionExpired = this.authService.tokenExpired();
+      // this.authService.logout();
+    }
+    else { this.sessionExpired = false; }
     this.formdata = new FormGroup({
       user: new FormControl(''),
       passwd: new FormControl('')
     });
+  }
+
+  ngOnDestroy() {
+    // this.navbarService.getLoginStatus().unsubscribe();
   }
 
   onClickSubmit(data) {
@@ -57,7 +61,7 @@ export class LoginComponent implements OnInit {
     )
     .subscribe(success => {
       if (success) {
-        this.navbarService.updateLoginStatus(true);
+        // this.navbarService.updateLoginStatus(true);
         this.router.navigate(['/dashboard']);
       }
     });

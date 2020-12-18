@@ -1,8 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, ErrorHandler, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgModule, ErrorHandler, NO_ERRORS_SCHEMA, ElementRef } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-// import {FormsModule} from '@angular/forms';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
+import {NgIdleKeepaliveModule} from '@ng-idle/keepalive';
+import { FormsModule } from '@angular/forms';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -18,17 +21,17 @@ import { P404Component } from './p404/p404.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { ContactComponent } from './contact/contact.component';
 import { D3donutComponent } from './d3donut/d3donut.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { SignupComponent } from './signup/signup.component';
+import { BudgetEditComponent } from './budget-edit/budget-edit.component';
 
 import { DataService } from './services/data.service';
 import { ErrorService } from './services/error.service';
 import { NavbarService } from './services/navbar.service';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { SignupComponent } from './signup/signup.component';
-import { BudgetEditComponent } from './budget-edit/budget-edit.component';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './services/auth.service';
 import { TokenInterceptor } from './services/token.interceptor';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { TimeoutModalComponent } from './services/timeout-modal';
 
 
 
@@ -48,18 +51,22 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     D3donutComponent,
     DashboardComponent,
     SignupComponent,
-    BudgetEditComponent
+    BudgetEditComponent,
+    TimeoutModalComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    // FormsModule
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule,
+    NgbModule,
+    NgIdleKeepaliveModule.forRoot()
   ],
   entryComponents: [
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+    TimeoutModalComponent
   ],
   providers: [
     {

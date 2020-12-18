@@ -1,4 +1,4 @@
-import { Injectable, ErrorHandler } from '@angular/core';
+import { Injectable, ErrorHandler, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { of, Observable } from 'rxjs';
 import { catchError, mapTo, tap } from 'rxjs/operators';
@@ -6,17 +6,23 @@ import { config } from './../config';
 import { Tokens } from '../services/tokens';
 import { NavbarService } from './navbar.service';
 import { ErrorService } from './error.service';
+// import { AppComponent } from '../app.component';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnDestroy {
+
 
   private readonly JWT_TOKEN = 'PB_JWT_TOKEN';
   private readonly REFRESH_TOKEN = 'PB_REFRESH_TOKEN';
   private loggedUser: string;
 
-  constructor(private http: HttpClient, private navbarService: NavbarService, private errorService: ErrorService) {
+  constructor(private http: HttpClient,
+              private navbarService: NavbarService,
+              private errorService: ErrorService)
+              // private appComponent: AppComponent)
+  {
     navbarService.updateLoginStatus(this.isLoggedIn());
     this.populateUserFromToken();
     // console.log('AuthService constructor', this.loggedUser);
@@ -46,6 +52,8 @@ export class AuthService {
         tap((tokens) => {
           console.log (tokens);
           this.doLoginUser(user.username, tokens);
+          // this.navbarService.updateLoginStatus(true);
+
         }),
         mapTo(true),
         catchError(error => {
@@ -57,15 +65,17 @@ export class AuthService {
   }
 
   logout() {
+    console.log('Logging out');
     return this.http.post<any>(`${config.apiUrl}/logout`, {
-      refreshToken: this.getRefreshToken()
+      "refreshToken": this.getRefreshToken()
     }).pipe(
       tap(() => {
         this.doLogoutUser();
-        this.navbarService.updateLoginStatus(false);
+        // this.navbarService.updateLoginStatus(false);
       }),
       mapTo(true),
       catchError(error => {
+        console.log('logout error', error);
         this.errorService.handleError(error.error);
         alert(error.error);
         return of(false);
@@ -79,12 +89,40 @@ export class AuthService {
     return this.tokenValid();
   }
 
-  refreshToken() {
-    return this.http.post<any>(`${config.apiUrl}/refresh`, {
+
+
+  // refreshToken(): Observable<any> {
+  //   console.log('Refreshing token');
+  //   const newToken = {refreshToken: this.getRefreshToken()};
+  //   return this.http.post<any>(`${config.apiUrl}/refresh`, newToken)
+  //   .pipe(tap((tokens: Tokens) => {
+  //     console.log('refresh tokens', tokens);
+  //     this.storeJwtToken(tokens.jwt);
+  //   }));
+  //   const creds = {
+  //     username: this.user,
+  //     password: this.password,
+  // };
+  // }
+
+  refreshToken(): Observable<boolean> {
+    const savedToken = {
       refreshToken: this.getRefreshToken()
-    }).pipe(tap((tokens: Tokens) => {
-      this.storeJwtToken(tokens.jwt);
-    }));
+    };
+    return this.http.post<any>(`${config.apiUrl}/refresh`, savedToken)
+      .pipe(
+        // tap(tokens => this.doLoginUser(user.username, this.initializeToken(tokens))),
+        tap((tokens) => {
+          console.log (tokens);
+          this.storeJwtToken(tokens.jwt);
+        }),
+        mapTo(true),
+        catchError(error => {
+          console.log('catch', error);
+          this.errorService.handleError(error);
+          alert(error);
+          return of(false);
+        }));
   }
 
   getJwtToken() {
@@ -138,18 +176,23 @@ export class AuthService {
     this.storeTokens(tokens);
     // this.navbarService.updateNavAfterAuth('user');
     this.navbarService.updateLoginStatus(true);
+    // this.appComponent.startTimer();
   }
 
   private doLogoutUser() {
     this.loggedUser = null;
+    this.navbarService.updateLoginStatus(false);
     this.removeTokens();
+    // this.appComponent.resetTimeOut();
   }
 
   private getRefreshToken() {
+    console.log('Get refresh token', localStorage.getItem(this.REFRESH_TOKEN));
     return localStorage.getItem(this.REFRESH_TOKEN);
   }
 
   private storeJwtToken(jwt: string) {
+    console.log('Storing token', jwt);
     localStorage.setItem(this.JWT_TOKEN, jwt);
   }
 
@@ -170,4 +213,11 @@ export class AuthService {
   //     refreshToken: null
   //   };
   // }
+
+
+  ngOnDestroy() {
+    this.removeTokens();
+    // this.appComponent.resetTimeOut();
+  }
+
 }

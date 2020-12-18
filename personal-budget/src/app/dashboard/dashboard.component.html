@@ -14,57 +14,48 @@
           <thead>
             <tr>
               <th>Title</th>
-              <!-- <th>ID</th> -->
               <th>Budget</th>
               <th>Expenses</th>
               <th>Remainder</th>
-              <th></th>
               <th>Actions</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let budget of allBudget">
-              <td>
-                <!-- <a [routerLink]="['/products', product.id]">
-                {{ product.productName }}
-              </a> -->
-                {{ budget.title }}
-              </td>
-              <!-- <td>{{ budget.id }}</td> -->
+            <tr *ngFor="let budget of allBudget; let i = index">
+              <td>{{ budget.title }}</td>
               <td>${{ budget.budget }}</td>
-
-              <!-- <td>{{ product.price | currency:"USD":"symbol":"1.2-2" }}</td> -->
               <td>${{ budget.expenses }}</td>
               <td>${{ budget.budget - budget.expenses }}</td>
 
               <td>
-                <!-- <button class="btn btn-outline-primary btn-sm"
-                      [routerLink]="['/budget', 0, 'edit']"> -->
                 <button
-                  class="btn btn-outline-primary btn-sm mr-3"
+                  class="btn btn-outline-primary btn-sm"
                   [routerLink]="['/budget', budget.id, 'edit']"
                 >
                   Edit budget
                 </button>
               </td>
-              <td class="input-group col-9">
-                <input
-                  #newExpense
-                  type="number"
-                  class="form-control"
-                  aria-label="expense"
-                  aria-describedby="new expense"
-                  placeholder="$"
-                />
-                <div class="input-group-append">
-                  <button
-                    class="btn btn-outline-primary btn-sm"
-                    type="button"
+              <td>
+                <div class="input-group col-9">
+                  <label class="sr-only" for="expense'">Modify expenses</label>
+                  <input
+                    type="number"
+                    class="form-control"
                     id="expense"
-                    (click)="addExpense(budget, newExpense.value)"
-                  >
-                    Modify expenses
-                  </button>
+                    (keyup.enter)="addExpense(budget, newExpense[i], i)"
+                    [(ngModel)]="newExpense[i]"
+                  />
+                  <div class="input-group-append">
+                    <button
+                      class="btn btn-outline-primary btn-sm input-group-append"
+                      type="button"
+                      id="expense"
+                      (click)="addExpense(budget, newExpense[i], i)"
+                    >
+                      Modify expenses
+                    </button>
+                  </div>
                 </div>
               </td>
             </tr>
