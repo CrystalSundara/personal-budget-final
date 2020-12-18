@@ -67,7 +67,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     )
     .subscribe(success => {
       if (success) {
-        this.navbarService.updateLoginStatus(true);
+        // this.navbarService.updateLoginStatus(true);
         this.router.navigate(['/dashboard']);
       }
     });

@@ -21,21 +21,28 @@ export class LoginComponent implements OnInit, OnDestroy {
   formdata;
   mySubscription: any;
   sessionExpired = false;
+  navSub;
 
 
   constructor(private authService: AuthService,
               private navbarService: NavbarService,
               private router: Router)
   {
-    this.navbarService.getLoginStatus().subscribe(status => this.isLoggedIn = status);
-    if (!!authService.getJwtToken()) {
-      this.sessionExpired = authService.tokenExpired();
-      // this.authService.logout();
-    }
-    else { this.sessionExpired = false; }
+    // const navSub = this.navbarService.getLoginStatus().subscribe(status => this.isLoggedIn = status);
+    // if (!!authService.getJwtToken()) {
+    //   this.sessionExpired = authService.tokenExpired();
+    //   // this.authService.logout();
+    // }
+    // else { this.sessionExpired = false; }
   }
 
   ngOnInit() {
+    this.navbarService.getLoginStatus().subscribe(status => this.isLoggedIn = status);
+    if (!!this.authService.getJwtToken()) {
+      this.sessionExpired = this.authService.tokenExpired();
+      // this.authService.logout();
+    }
+    else { this.sessionExpired = false; }
     this.formdata = new FormGroup({
       user: new FormControl(''),
       passwd: new FormControl('')
@@ -61,7 +68,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     )
     .subscribe(success => {
       if (success) {
-        this.navbarService.updateLoginStatus(true);
+        // this.navbarService.updateLoginStatus(true);
         this.router.navigate(['/dashboard']);
       }
     });

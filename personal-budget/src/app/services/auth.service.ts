@@ -52,6 +52,8 @@ export class AuthService implements OnDestroy {
         tap((tokens) => {
           console.log (tokens);
           this.doLoginUser(user.username, tokens);
+          // this.navbarService.updateLoginStatus(true);
+
         }),
         mapTo(true),
         catchError(error => {
@@ -69,7 +71,7 @@ export class AuthService implements OnDestroy {
     }).pipe(
       tap(() => {
         this.doLogoutUser();
-        this.navbarService.updateLoginStatus(false);
+        // this.navbarService.updateLoginStatus(false);
       }),
       mapTo(true),
       catchError(error => {
@@ -173,12 +175,13 @@ export class AuthService implements OnDestroy {
     console.log ('Do login token', tokens);
     this.storeTokens(tokens);
     // this.navbarService.updateNavAfterAuth('user');
-    // this.navbarService.updateLoginStatus(true);
+    this.navbarService.updateLoginStatus(true);
     // this.appComponent.startTimer();
   }
 
   private doLogoutUser() {
     this.loggedUser = null;
+    this.navbarService.updateLoginStatus(false);
     this.removeTokens();
     // this.appComponent.resetTimeOut();
   }
