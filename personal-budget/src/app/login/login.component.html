@@ -3,13 +3,13 @@
 </div>
 
 <ng-template #loggedOut>
-  <div class="container">
+  <div class="container col-3">
     <div class="alert alert-danger" *ngIf="sessionExpired">
       Your session is expired. Please login again.
     </div>
     <h1>Login</h1>
 
-    <div class="col-4">
+    <div>
       <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
         <div class="form-group">
           <label
@@ -43,9 +43,7 @@
     <!-- <button class="btn btn-secondary" (click)="login()">Login to dashboard</button>
   <button class="btn btn-primary" (click)="loginAdmin()">Login as Admin</button> -->
     <hr />
-    <p>
-      Don't have an account?
-      <a [routerLink]="['/signup']" class="btn btn-secondary">Sign Up</a>
-    </p>
+    <p>Don't have an account?</p>
+    <a [routerLink]="['/signup']" class="btn btn-secondary">Sign Up</a>
   </div>
 </ng-template>

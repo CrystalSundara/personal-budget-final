@@ -45,7 +45,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         password: this.password,
     };
     // console.log ('Creds', creds);
-    // this.dataService.username = this.user;
     this.authService.postUserData(creds).subscribe((data) => {
       this.signupUser(data);
       // console.log('Login data', data);

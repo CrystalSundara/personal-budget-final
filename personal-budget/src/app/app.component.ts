@@ -1,14 +1,3 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'pb-root',
-//   templateUrl: './app.component.html',
-//   styleUrls: ['./app.component.scss']
-// })
-// export class AppComponent {
-//   title = 'personal-budget';
-// }
-
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {NgbModalRef} from '@ng-bootstrap/ng-bootstrap/modal/modal.module';
 import {Keepalive} from '@ng-idle/keepalive';
@@ -41,9 +30,9 @@ export class AppComponent implements OnDestroy, OnInit {
 
     console.log('ProgressBarPopup', this.progressBarPopup);
 
-    // sets an idle timeout of 15 minutes.
+    // sets an idle timeout of in seconds - how long to be idle before showing popup.
     this.idle.setIdle(15);
-    // sets a timeout period of 5 minutes.
+    // sets a timeout period in seconds - how long to acknowledge the popup.
     this.idle.setTimeout(20);
     // sets the interrupts like Keydown, scroll, mouse wheel, mouse down, and etc
     idle.setInterrupts([
@@ -77,6 +66,10 @@ export class AppComponent implements OnDestroy, OnInit {
       this.progressBarPopup.componentInstance.countSeconds = countdown % 60;
     });
 
+
+    // sets the ping interval to 15 seconds
+    this.keepalive.interval(15);
+
     this.keepalive.onPing.subscribe(() => {
           const sub = this.authService.refreshToken()
           .subscribe(success => {
@@ -86,8 +79,6 @@ export class AppComponent implements OnDestroy, OnInit {
           });
         });
 
-        // sets the ping interval to 15 seconds
-    this.keepalive.interval(30);
 
     this.navbarService.getLoginStatus()
     .subscribe((status) => {

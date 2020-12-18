@@ -26,15 +26,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService,
               private navbarService: NavbarService,
-              private router: Router)
-  {
-    // const navSub = this.navbarService.getLoginStatus().subscribe(status => this.isLoggedIn = status);
-    // if (!!authService.getJwtToken()) {
-    //   this.sessionExpired = authService.tokenExpired();
-    //   // this.authService.logout();
-    // }
-    // else { this.sessionExpired = false; }
-  }
+              private router: Router) {}
+
 
   ngOnInit() {
     this.navbarService.getLoginStatus().subscribe(status => this.isLoggedIn = status);

@@ -135,10 +135,10 @@ export class DashboardComponent implements AfterViewInit {
   onSaveComplete(): void {
     // Reset the form to clear the flags
     // this.newExpense.reset();
-    this.router.navigate(['/dashboard'])
-    .then(() => {
-      window.location.reload();
-    });
+    // this.router.navigate(['/dashboard'])
+    // .then(() => {
+    //   window.location.reload();
+    // });
   }
 
   resetExpenses() {
