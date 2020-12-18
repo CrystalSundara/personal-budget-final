@@ -93,9 +93,22 @@ export class DashboardComponent implements AfterViewInit {
             borderColor: '#005Fcc',
             backgroundColor: 'rgba(0, 255, 0, 0.1)'
           },
-      ],
-    },
-  });
+        ],
+      },
+      options: {
+        scales: {
+          yAxes: [{
+              ticks: {
+                  beginAtZero: true,
+                  display: false
+              },
+              gridLines: {
+                display: false
+              }
+          }],
+        },
+      }
+    });
   }
 
   createMixedChart(): void {
@@ -122,6 +135,15 @@ export class DashboardComponent implements AfterViewInit {
           },
         ],
       },
+      options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+      }
     });
   }
 
