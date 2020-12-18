@@ -5,6 +5,8 @@ import { DataService } from '../services/data.service';
 import { ErrorService } from '../services/error.service';
 import { Budget } from '../services/budget';
 import { AuthService } from '../services/auth.service';
+import {FormsModule, NgForm} from '@angular/forms';
+
 
 
 @Component({
@@ -20,6 +22,7 @@ export class DashboardComponent implements AfterViewInit {
   budget = [];
   expenses = [];
   colors = [];
+  newExpense = [];
 
   constructor(public dataService: DataService,
               private route: ActivatedRoute,
@@ -122,7 +125,7 @@ export class DashboardComponent implements AfterViewInit {
     });
   }
 
-  addExpense(budget: Budget, expense: number) {
+  addExpense(budget: Budget, expense: number, i: number) {
     budget.expenses = +budget.expenses + +expense;
     this.dataService.updateBudget(budget)
     .subscribe({
@@ -130,9 +133,14 @@ export class DashboardComponent implements AfterViewInit {
       error: err => this.errorMessage = err
     });
     console.log('Add expense clicked', expense, budget.id);
+    this.newExpense[i] = null;
   }
 
   onSaveComplete(): void {
+    this.populateChartData();
+    this.createPieChart();
+    this.createRadarChart();
+    this.createMixedChart();
     // Reset the form to clear the flags
     // this.newExpense.reset();
     // this.router.navigate(['/dashboard'])

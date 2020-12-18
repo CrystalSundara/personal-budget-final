@@ -5,6 +5,8 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import {NgIdleKeepaliveModule} from '@ng-idle/keepalive';
+import { FormsModule } from '@angular/forms';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -57,6 +59,7 @@ import { TimeoutModalComponent } from './services/timeout-modal';
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
     NgbModule,
     NgIdleKeepaliveModule.forRoot()
   ],
