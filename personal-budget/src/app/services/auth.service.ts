@@ -40,7 +40,7 @@ export class AuthService implements OnDestroy {
       }),
       catchError(error => {
         // this.errorService.handleError(error.error);
-        alert(error);
+        // alert(error);
         return of(false);
       }));
   }
@@ -50,7 +50,7 @@ export class AuthService implements OnDestroy {
       .pipe(
         // tap(tokens => this.doLoginUser(user.username, this.initializeToken(tokens))),
         tap((tokens) => {
-          console.log (tokens);
+          console.log ('Login', tokens);
           this.doLoginUser(user.username, tokens);
           // this.navbarService.updateLoginStatus(true);
 
@@ -59,7 +59,7 @@ export class AuthService implements OnDestroy {
         catchError(error => {
           console.log('catch', error);
           this.errorService.handleError(error);
-          alert(error);
+          // alert(error);
           return of(false);
         }));
   }
@@ -77,7 +77,7 @@ export class AuthService implements OnDestroy {
       catchError(error => {
         console.log('logout error', error);
         this.errorService.handleError(error.error);
-        alert(error.error);
+        // alert(error.error);
         return of(false);
       }));
     // this.navbarService.updateLoginStatus(false);
@@ -120,7 +120,7 @@ export class AuthService implements OnDestroy {
         catchError(error => {
           console.log('catch', error);
           this.errorService.handleError(error);
-          alert(error);
+          // alert(error);
           return of(false);
         }));
   }

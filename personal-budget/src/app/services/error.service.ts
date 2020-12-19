@@ -20,10 +20,13 @@ export class ErrorService implements ErrorHandler{
   // }
   // // router.navigate(['login']);
   // }
-  handleError(error: Error) {
+  handleError(error: any) {
     if (error instanceof HttpErrorResponse) {
       console.error('There was an HTTP error.', error.message, 'Status code:', (error as HttpErrorResponse).status);
-      alert (error.message);
+      // alert ((error as HttpErrorResponse).status);
+    } else {
+    if (!!error.sqlMessage) {
+      alert (error.sqlMessage);
     } else {
     alert(
       error.message || 'Undefined client error'
@@ -31,4 +34,5 @@ export class ErrorService implements ErrorHandler{
     console.error('Error from global error handler', error);
     }
   }
+}
 }
