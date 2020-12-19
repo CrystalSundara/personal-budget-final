@@ -6,13 +6,18 @@
     <p class="error">{{ error }}</p>
 
     <div>
-      <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
+      <form
+        [formGroup]="formdata"
+        (ngSubmit)="onClickSubmit(formdata.value)"
+        data-cy="signup-form"
+      >
         <div class="form-group">
           <label
             >Username<input
               type="text"
               class="form-control"
               name="user"
+              data-cy="username"
               for="username"
               formControlName="user"
           /></label>
@@ -23,6 +28,7 @@
             >Password<input
               type="password"
               class="form-control"
+              data-cy="password"
               for="password"
               name="passwd"
               formControlName="passwd"
@@ -30,7 +36,12 @@
           <br />
         </div>
 
-        <button type="submit" class="btn btn-primary forsubmit" value="Sign up">
+        <button
+          type="submit"
+          data-cy="signup-button"
+          class="btn btn-primary forsubmit"
+          value="Sign up"
+        >
           Sign up
         </button>
       </form>

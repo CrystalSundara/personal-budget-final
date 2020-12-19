@@ -10,7 +10,11 @@
     <h1>Login</h1>
 
     <div>
-      <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
+      <form
+        [formGroup]="formdata"
+        (ngSubmit)="onClickSubmit(formdata.value)"
+        data-cy="login-form"
+      >
         <div class="form-group">
           <label
             >Username<input
@@ -18,6 +22,7 @@
               class="form-control"
               name="user"
               for="username"
+              data-cy="username"
               formControlName="user"
           /></label>
           <br />
@@ -28,13 +33,19 @@
               type="password"
               class="form-control"
               for="password"
+              data-cy="password"
               name="passwd"
               formControlName="passwd"
           /></label>
           <br />
         </div>
 
-        <button type="submit" class="btn btn-primary forsubmit" value="Log in">
+        <button
+          type="submit"
+          data-cy="login-button"
+          class="btn btn-primary forsubmit"
+          value="Log in"
+        >
           Log in
         </button>
       </form>
