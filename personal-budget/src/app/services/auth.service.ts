@@ -67,7 +67,7 @@ export class AuthService implements OnDestroy {
   logout() {
     console.log('Logging out');
     return this.http.post<any>(`${config.apiUrl}/logout`, {
-      "refreshToken": this.getRefreshToken()
+      refreshToken: this.getRefreshToken()
     }).pipe(
       tap(() => {
         this.doLogoutUser();

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ export class NavbarService {
   private isLoggedIn = new Subject<boolean>();
 
   constructor() {
+    // this.updateLoginStatus(this.authService.tokenValid());
     // this.addItem({ text: 'Login / Sign up', path: 'login' });
     // this.isLoggedIn.next(false);
   }

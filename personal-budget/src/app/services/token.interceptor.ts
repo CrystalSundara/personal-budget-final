@@ -20,7 +20,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(catchError(error => {
       if (error instanceof HttpErrorResponse && error.status === 401) {
-        if (!!error.error.err) {alert(error.error.err)}
+        if (!!error.error.err) {alert(error.error.err); }
         console.log(error);
         return this.handle401Error(request, next);
       } else {

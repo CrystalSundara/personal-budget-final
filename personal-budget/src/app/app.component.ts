@@ -64,6 +64,7 @@ export class AppComponent implements OnDestroy, OnInit {
       this.progressBarPopup.componentInstance.progressCount = this.reverseNumber(countdown);
       this.progressBarPopup.componentInstance.countMinutes = (Math.floor(countdown / 60));
       this.progressBarPopup.componentInstance.countSeconds = countdown % 60;
+
     });
 
 
@@ -90,9 +91,15 @@ export class AppComponent implements OnDestroy, OnInit {
       }
     });
 
+    if (authService.isLoggedIn) {
+      this.reset();
+      this.idle.setKeepaliveEnabled(true);
+    }
+
   }
 
   ngOnInit() {
+
 
   }
 
