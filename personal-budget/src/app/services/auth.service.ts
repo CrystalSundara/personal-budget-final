@@ -50,7 +50,7 @@ export class AuthService implements OnDestroy {
       .pipe(
         // tap(tokens => this.doLoginUser(user.username, this.initializeToken(tokens))),
         tap((tokens) => {
-          console.log ('Login', tokens);
+          // console.log ('Login', tokens);
           this.doLoginUser(user.username, tokens);
           // this.navbarService.updateLoginStatus(true);
 

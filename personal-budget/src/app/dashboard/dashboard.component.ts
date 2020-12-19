@@ -96,16 +96,14 @@ export class DashboardComponent implements AfterViewInit {
         ],
       },
       options: {
-        scales: {
-          yAxes: [{
-              ticks: {
-                  beginAtZero: true,
-                  display: false
-              },
-              gridLines: {
-                display: false
-              }
-          }],
+        scale: {
+          ticks: {
+              beginAtZero: true,
+              display: false
+          },
+          gridLines: {
+            display: false
+          }
         },
       }
     });
