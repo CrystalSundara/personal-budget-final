@@ -16,6 +16,7 @@ describe("login tests", () => {
       target: "window",
       fully: true,
     });
+    cy.screenshot();
 
     cy.get("[data-cy=username")
       .type("test-user1")
@@ -30,6 +31,7 @@ describe("login tests", () => {
       target: "window",
       fully: true,
     });
+    cy.screenshot();
 
     cy.eyesClose();
   });
